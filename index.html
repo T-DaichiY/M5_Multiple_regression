@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重回帰分析 完全ガイド（M5）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="logo">重回帰分析 <span>完全ガイド</span></div>
+  <nav class="header-nav">
+    <a href="index.html" class="active">🏠 概要</a>
+    <a href="ch1.html">📈 1</a>
+    <a href="ch2.html">🩺 2</a>
+    <a href="ch3.html">⚖️ 3</a>
+    <a href="ch3_1.html">🎯 3.1</a>
+    <a href="ch4.html">🔗 4</a>
+    <a href="ch5.html">〰️ 5</a>
+    <a href="ch6.html">🏷️ 6</a>
+    <a href="ch7.html">📅 7</a>
+    <a href="ch8.html">✖️ 8</a>
+    <a href="ch9.html">➡️ 9</a>
+    <a href="ch10.html">⬅️ 10</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>重<span>回帰分析</span><br>完全ガイド</h1>
+    <p>1つの予測変数では足りない。湿度・気温・風速・曜日・天気…たくさんの手がかりを使って「自転車レンタル数」を予測する。Rで学ぶ実践的な重回帰分析を、ゼロからやさしく。</p>
+    <div class="hero-badges">
+      <span class="badge">🚲 自転車レンタル予測で学ぶ</span>
+      <span class="badge">🎓 全11章</span>
+      <span class="badge">🍎 小学生にもわかる説明つき</span>
+      <span class="badge">✏️ MCQ確認テスト</span>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+
+  <div class="intro-section fade-in">
+    <div>
+      <h2>重回帰分析（じゅうかいきぶんせき）って何？ 🤔</h2>
+      <p><span class="highlight">単回帰</span>は「気温」という1つの手がかりだけで自転車のレンタル数を予測しました。でも現実は、気温だけでは決まりませんよね。</p>
+      <p><span class="highlight">重回帰</span>は「気温＋湿度＋風速＋曜日＋天気…」と、<strong>たくさんの手がかり（予測変数）を同時に使って</strong>予測する方法です。手がかりが増えるほど、データに隠れた「本当のパターン（シグナル）」をうまく拾えるようになります。</p>
+      <p>でも、ただ手がかりを増やせばいいわけではありません。<strong>どの変数を入れる？余計な変数は？変数同士が似すぎていない？外れ値は？</strong>──このガイドはそれを1つずつ解決していきます。</p>
+      <p style="background:var(--yellow-light);padding:.85rem 1rem;border-radius:8px;border-left:3px solid var(--yellow);font-size:.9rem;">
+        🌟 <strong>このガイドの目標：</strong>「モデルを作る」だけでなく「良いモデルかどうか見抜く力」と「悪い部分を直す力」を身につけること。すべての例は<strong>自転車レンタル数の予測</strong>で統一しています。
+      </p>
+    </div>
+    <div>
+      <div class="llm-diagram">
+        <div class="diagram-title">重回帰モデルづくりの流れ</div>
+        <div class="flow-steps">
+          <div class="flow-step"><span class="step-icon">📊</span><div class="step-text"><strong>① モデルを作る</strong><span>rentals ~ 湿度 + 気温 + 風速</span></div></div>
+          <div class="flow-arrow-v">↓</div>
+          <div class="flow-step"><span class="step-icon">🩺</span><div class="step-text"><strong>② 診断する</strong><span>調整済みR²・AIC・VIF・外れ値で良し悪しを判定</span></div></div>
+          <div class="flow-arrow-v">↓</div>
+          <div class="flow-step"><span class="step-icon">🔧</span><div class="step-text"><strong>③ 改善する</strong><span>変数を足す・引く・変換する・交互作用を加える</span></div></div>
+          <div class="flow-arrow-v">↓</div>
+          <div class="flow-step"><span class="step-icon">🎉</span><div class="step-text"><strong>④ 良いモデル完成</strong><span>シグナルを捉え、ノイズを無視する</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-header fade-in stagger-1">
+    <h2>📚 章の一覧</h2>
+    <p>章をクリックして学習を始めましょう。各章には詳しい解説・図解・🍎かんたん説明・英語MCQクイズが含まれます。</p>
+  </div>
+
+  <div class="chapters-grid">
+    <a href="ch1.html" class="chapter-card c-blue fade-in stagger-1">
+      <div class="card-num">第1章</div><div class="card-icon">📈</div>
+      <div class="card-title">重回帰分析（Multiple Regression）</div>
+      <div class="card-desc">単回帰との違い・複数の予測変数・回帰式の書き方・Rでのモデル作成・3つの予測方法（手計算 / fitted / predict）。すべての土台。</div>
+      <div class="card-topics"><span class="topic-tag">回帰式</span><span class="topic-tag">係数</span><span class="topic-tag">predict</span><span class="topic-tag">残差</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch2.html" class="chapter-card c-purple fade-in stagger-2">
+      <div class="card-num">第2章</div><div class="card-icon">🩺</div>
+      <div class="card-title">診断（Diagnostics）</div>
+      <div class="card-desc">どのモデルが良いか見抜く方法。調整済みR²・AIC・BIC・残差標準誤差S・RMSE・F統計量・MallowのCp。1つの指標に頼らない総合判断。</div>
+      <div class="card-topics"><span class="topic-tag">調整済みR²</span><span class="topic-tag">AIC/BIC</span><span class="topic-tag">RMSE</span><span class="topic-tag">F検定</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch3.html" class="chapter-card c-red fade-in stagger-1">
+      <div class="card-num">第3章</div><div class="card-icon">⚖️</div>
+      <div class="card-title">標準化回帰係数</div>
+      <div class="card-desc">単位が違う予測変数の「影響の大きさ」を公平に比べる方法。Zスコア化・scale関数・lm.betaパッケージ。3つのやり方と注意点。</div>
+      <div class="card-topics"><span class="topic-tag">Zスコア</span><span class="topic-tag">scale</span><span class="topic-tag">lm.beta</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch3_1.html" class="chapter-card c-green fade-in stagger-2">
+      <div class="card-num">第3.1章</div><div class="card-icon">🎯</div>
+      <div class="card-title">影響点分析（Influential Points）</div>
+      <div class="card-desc">外れ値とは違う「回帰線をゆがめる点」。高レバレッジ点・クックの距離（Cook's D）・しきい値・影響点を除いてモデルを比較。</div>
+      <div class="card-topics"><span class="topic-tag">外れ値</span><span class="topic-tag">レバレッジ</span><span class="topic-tag">Cook's D</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch4.html" class="chapter-card c-yellow fade-in stagger-1">
+      <div class="card-num">第4章</div><div class="card-icon">🔗</div>
+      <div class="card-title">多重共線性とVIF</div>
+      <div class="card-desc">予測変数同士が似すぎている問題。係数がおかしくなる理由・相関行列・分散拡大係数（VIF）・許容度（Tolerance）・対処法。</div>
+      <div class="card-topics"><span class="topic-tag">相関</span><span class="topic-tag">VIF</span><span class="topic-tag">Tolerance</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch5.html" class="chapter-card c-teal fade-in stagger-2">
+      <div class="card-num">第5章</div><div class="card-icon">〰️</div>
+      <div class="card-title">多項式回帰</div>
+      <div class="card-desc">直線では捉えられない「曲がった関係」を扱う。geom_smoothで曲線を発見・2乗項の追加・後退消去・多項式回帰のVIF問題。</div>
+      <div class="card-topics"><span class="topic-tag">非線形</span><span class="topic-tag">2乗項</span><span class="topic-tag">曲線</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch6.html" class="chapter-card c-blue fade-in stagger-1">
+      <div class="card-num">第6章</div><div class="card-icon">🏷️</div>
+      <div class="card-title">カテゴリ変数の変換</div>
+      <div class="card-desc">「季節」「曜日」「天気」など数字で表されたカテゴリの扱い方。factor化・case_when・ワンホット（ダミー）エンコーディング・ダミー変数トラップ。</div>
+      <div class="card-topics"><span class="topic-tag">factor</span><span class="topic-tag">ワンホット</span><span class="topic-tag">ダミー</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch7.html" class="chapter-card c-purple fade-in stagger-2">
+      <div class="card-num">第7章</div><div class="card-icon">📅</div>
+      <div class="card-title">日付データの処理</div>
+      <div class="card-desc">日付列から年・月・日を取り出す。lubridateライブラリ・月をfactorに・~.（全変数）モデル・カテゴリ変数の一般化VIF（GVIF）。</div>
+      <div class="card-topics"><span class="topic-tag">lubridate</span><span class="topic-tag">年月日</span><span class="topic-tag">GVIF</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch8.html" class="chapter-card c-red fade-in stagger-1">
+      <div class="card-num">第8章</div><div class="card-icon">✖️</div>
+      <div class="card-title">交互作用（Interaction）</div>
+      <div class="card-desc">2つの変数の「組み合わせ効果」。多重共線性との違い・運動×食事の例・Rでの * と : ・交互作用項を含む式での予測計算。</div>
+      <div class="card-topics"><span class="topic-tag">組み合わせ効果</span><span class="topic-tag">*と:</span><span class="topic-tag">予測</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch9.html" class="chapter-card c-green fade-in stagger-2">
+      <div class="card-num">第9章</div><div class="card-icon">➡️</div>
+      <div class="card-title">変数選択：前進選択（Forward）</div>
+      <div class="card-desc">最良の予測変数を選ぶ。全部分集合回帰がなぜ無理か・1つずつ足していく前進選択・step関数・AIC / BICで自動化。</div>
+      <div class="card-topics"><span class="topic-tag">前進選択</span><span class="topic-tag">step関数</span><span class="topic-tag">AIC</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch10.html" class="chapter-card c-yellow fade-in stagger-1">
+      <div class="card-num">第10章</div><div class="card-icon">⬅️</div>
+      <div class="card-title">変数選択：後退選択（Backward）</div>
+      <div class="card-desc">全部入りから1つずつ削る。最も非有意な変数をp値で除去・step関数で自動後退・前進との違い・多重共線性は別途要対処。</div>
+      <div class="card-topics"><span class="topic-tag">後退選択</span><span class="topic-tag">p値</span><span class="topic-tag">step関数</span></div>
+      <div class="card-arrow">→</div>
+    </a>
+  </div>
+
+  <div class="quick-ref fade-in">
+    <h3>🗺️ 全11章マップ — このガイドで学ぶこと</h3>
+    <div style="font-size:.75rem;font-weight:700;color:#475569;margin-bottom:.5rem;letter-spacing:.05em;">🧱 基礎（モデルを作る・評価する）</div>
+    <div class="techniques-list" style="margin-bottom:1rem;">
+      <div class="technique-item">📈 重回帰モデル</div>
+      <div class="technique-item">🩺 診断指標</div>
+      <div class="technique-item">⚖️ 標準化係数</div>
+      <div class="technique-item">🎯 影響点（Cook's D）</div>
+    </div>
+    <div style="font-size:.75rem;font-weight:700;color:#475569;margin-bottom:.5rem;letter-spacing:.05em;">🔧 改善（データを整える・拡張する）</div>
+    <div class="techniques-list" style="margin-bottom:1rem;">
+      <div class="technique-item">🔗 多重共線性 / VIF</div>
+      <div class="technique-item">〰️ 多項式回帰</div>
+      <div class="technique-item">🏷️ カテゴリ変数</div>
+      <div class="technique-item">📅 日付データ</div>
+      <div class="technique-item">✖️ 交互作用</div>
+    </div>
+    <div style="font-size:.75rem;font-weight:700;color:#475569;margin-bottom:.5rem;letter-spacing:.05em;">🎯 仕上げ（変数を選ぶ）</div>
+    <div class="techniques-list">
+      <div class="technique-item">➡️ 前進選択</div>
+      <div class="technique-item">⬅️ 後退選択</div>
+    </div>
+  </div>
+
+  <div class="how-to fade-in">
+    <h3>📖 この教材の使い方</h3>
+    <div class="steps-row">
+      <div class="step-num-card"><div class="num-circle">1</div><h4>理論を読む</h4><p>各セクションで概念を詳しく解説。Rのコード例も豊富。</p></div>
+      <div class="step-num-card"><div class="num-circle">2</div><h4>図を見る</h4><p>回帰の仕組みや指標を、動く図解でイメージできる。</p></div>
+      <div class="step-num-card"><div class="num-circle">3</div><h4>🍎かんたん説明</h4><p>難しい概念はすべて小学生向けのやさしい例え話つき。</p></div>
+      <div class="step-num-card"><div class="num-circle">4</div><h4>MCQに挑戦</h4><p>各章末に英語で5問のクイズ。理解度をその場で確認。</p></div>
+      <div class="step-num-card"><div class="num-circle">5</div><h4>用語を確認</h4><p>右サイドバーに日英併記の重要用語集。いつでも参照可。</p></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>🚲 SU1 Data Analytics M5 講義をもとに作成 · <strong>重回帰分析 完全ガイド</strong></p>
+  <p style="margin-top:.5rem;"><a href="ch1.html">第1章から学習スタート →</a></p>
+</footer>
+</body>
+</html>
