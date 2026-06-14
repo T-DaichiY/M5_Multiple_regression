@@ -18,6 +18,15 @@ body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:
 .header-nav{display:flex;gap:.2rem;margin-left:auto;flex-wrap:wrap;}
 .header-nav a{text-decoration:none;color:var(--text-sec);font-size:.74rem;font-weight:600;padding:.28rem .55rem;border-radius:20px;transition:all .2s;border:1.5px solid transparent;white-space:nowrap;}
 .header-nav a:hover,.header-nav a.active{background:var(--primary-light);color:var(--primary);border-color:var(--primary);}
+/* chapter nav group: main link + tiny easy link */
+.header-nav .navg{display:inline-flex;align-items:stretch;border:1.5px solid transparent;border-radius:20px;overflow:hidden;}
+.header-nav .navg:hover{border-color:var(--border);}
+.header-nav .navg a{border:none;border-radius:0;padding:.28rem .45rem;}
+.header-nav .navg a.n-main{padding-right:.4rem;}
+.header-nav .navg a.n-easy{font-size:.7rem;padding:.28rem .42rem;color:#0e7490;border-left:1px dashed var(--border);}
+.header-nav .navg a.n-easy:hover{background:var(--teal-light);color:#0e7490;border-color:transparent;}
+.header-nav .navg a.active{background:var(--primary-light);color:var(--primary);}
+.header-nav .navg a.n-easy.active{background:var(--teal-light);color:#0e7490;}
 
 /* ===== Hero (index) ===== */
 .hero{background:linear-gradient(135deg,#1e293b 0%,#1d4ed8 50%,#7c3aed 100%);color:white;padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}

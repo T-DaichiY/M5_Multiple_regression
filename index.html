@@ -11,17 +11,17 @@
   <div class="logo">重回帰分析 <span>完全ガイド</span></div>
   <nav class="header-nav">
     <a href="index.html" class="active">🏠 概要</a>
-    <a href="ch1.html">📈 1</a>
-    <a href="ch2.html">🩺 2</a>
-    <a href="ch3.html">⚖️ 3</a>
-    <a href="ch3_1.html">🎯 3.1</a>
-    <a href="ch4.html">🔗 4</a>
-    <a href="ch5.html">〰️ 5</a>
-    <a href="ch6.html">🏷️ 6</a>
-    <a href="ch7.html">📅 7</a>
-    <a href="ch8.html">✖️ 8</a>
-    <a href="ch9.html">➡️ 9</a>
-    <a href="ch10.html">⬅️ 10</a>
+    <span class="navg"><a class="n-main" href="ch1.html">📈 1</a><a class="n-easy" href="ch1_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch2.html">🩺 2</a><a class="n-easy" href="ch2_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch3.html">⚖️ 3</a><a class="n-easy" href="ch3_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch3_1.html">🎯 3.1</a><a class="n-easy" href="ch3_1_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch4.html">🔗 4</a><a class="n-easy" href="ch4_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch5.html">〰️ 5</a><a class="n-easy" href="ch5_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch6.html">🏷️ 6</a><a class="n-easy" href="ch6_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch7.html">📅 7</a><a class="n-easy" href="ch7_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch8.html">✖️ 8</a><a class="n-easy" href="ch8_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch9.html">➡️ 9</a><a class="n-easy" href="ch9_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch10.html">⬅️ 10</a><a class="n-easy" href="ch10_easy.html" title="やさしい版">🍎</a></span>
   </nav>
 </header>
 
@@ -67,8 +67,26 @@
   </div>
 
   <div class="section-header fade-in stagger-1">
-    <h2>📚 章の一覧</h2>
-    <p>章をクリックして学習を始めましょう。各章には詳しい解説・図解・🍎かんたん説明・英語MCQクイズが含まれます。</p>
+    <h2>📚 章の一覧（2バージョン）</h2>
+    <p>各章に「📘 本編（詳しい版）」と「🍎 やさしい版（図・アニメ・スライダー）」の2つがあります。下の表からどちらでも開けます。</p>
+  </div>
+
+  <div class="version-index fade-in" style="background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:1.25rem;margin-bottom:2.5rem;overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:.9rem;min-width:520px;">
+      <thead>
+        <tr style="border-bottom:2px solid var(--border);">
+          <th style="text-align:left;padding:.6rem .75rem;color:var(--text-sec);font-size:.8rem;">章</th>
+          <th style="text-align:left;padding:.6rem .75rem;">タイトル</th>
+          <th style="text-align:center;padding:.6rem .5rem;width:120px;">📘 本編</th>
+          <th style="text-align:center;padding:.6rem .5rem;width:140px;">🍎 やさしい版</th>
+        </tr>
+      </thead>
+      <tbody id="vi-body"></tbody>
+    </table>
+  </div>
+
+  <div class="section-header fade-in" style="margin-bottom:1.5rem;">
+    <h2 style="font-size:1.3rem;">🗂️ カードで見る</h2>
   </div>
 
   <div class="chapters-grid">
@@ -77,6 +95,7 @@
       <div class="card-title">重回帰分析（Multiple Regression）</div>
       <div class="card-desc">単回帰との違い・複数の予測変数・回帰式の書き方・Rでのモデル作成・3つの予測方法（手計算 / fitted / predict）。すべての土台。</div>
       <div class="card-topics"><span class="topic-tag">回帰式</span><span class="topic-tag">係数</span><span class="topic-tag">predict</span><span class="topic-tag">残差</span></div>
+      <div style="margin-top:.4rem;"><a href="ch1_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第1章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch2.html" class="chapter-card c-purple fade-in stagger-2">
@@ -84,6 +103,7 @@
       <div class="card-title">診断（Diagnostics）</div>
       <div class="card-desc">どのモデルが良いか見抜く方法。調整済みR²・AIC・BIC・残差標準誤差S・RMSE・F統計量・MallowのCp。1つの指標に頼らない総合判断。</div>
       <div class="card-topics"><span class="topic-tag">調整済みR²</span><span class="topic-tag">AIC/BIC</span><span class="topic-tag">RMSE</span><span class="topic-tag">F検定</span></div>
+      <div style="margin-top:.5rem;"><a href="ch2_easy.html" style="font-size:.8rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.3rem .7rem;border-radius:20px;">🍎 むずかしい人向け：第2章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch3.html" class="chapter-card c-red fade-in stagger-1">
@@ -91,6 +111,7 @@
       <div class="card-title">標準化回帰係数</div>
       <div class="card-desc">単位が違う予測変数の「影響の大きさ」を公平に比べる方法。Zスコア化・scale関数・lm.betaパッケージ。3つのやり方と注意点。</div>
       <div class="card-topics"><span class="topic-tag">Zスコア</span><span class="topic-tag">scale</span><span class="topic-tag">lm.beta</span></div>
+      <div style="margin-top:.4rem;"><a href="ch3_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第3章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch3_1.html" class="chapter-card c-green fade-in stagger-2">
@@ -98,6 +119,7 @@
       <div class="card-title">影響点分析（Influential Points）</div>
       <div class="card-desc">外れ値とは違う「回帰線をゆがめる点」。高レバレッジ点・クックの距離（Cook's D）・しきい値・影響点を除いてモデルを比較。</div>
       <div class="card-topics"><span class="topic-tag">外れ値</span><span class="topic-tag">レバレッジ</span><span class="topic-tag">Cook's D</span></div>
+      <div style="margin-top:.4rem;"><a href="ch3_1_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第3.1章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch4.html" class="chapter-card c-yellow fade-in stagger-1">
@@ -105,6 +127,7 @@
       <div class="card-title">多重共線性とVIF</div>
       <div class="card-desc">予測変数同士が似すぎている問題。係数がおかしくなる理由・相関行列・分散拡大係数（VIF）・許容度（Tolerance）・対処法。</div>
       <div class="card-topics"><span class="topic-tag">相関</span><span class="topic-tag">VIF</span><span class="topic-tag">Tolerance</span></div>
+      <div style="margin-top:.4rem;"><a href="ch4_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第4章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch5.html" class="chapter-card c-teal fade-in stagger-2">
@@ -112,6 +135,7 @@
       <div class="card-title">多項式回帰</div>
       <div class="card-desc">直線では捉えられない「曲がった関係」を扱う。geom_smoothで曲線を発見・2乗項の追加・後退消去・多項式回帰のVIF問題。</div>
       <div class="card-topics"><span class="topic-tag">非線形</span><span class="topic-tag">2乗項</span><span class="topic-tag">曲線</span></div>
+      <div style="margin-top:.4rem;"><a href="ch5_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第5章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch6.html" class="chapter-card c-blue fade-in stagger-1">
@@ -119,6 +143,7 @@
       <div class="card-title">カテゴリ変数の変換</div>
       <div class="card-desc">「季節」「曜日」「天気」など数字で表されたカテゴリの扱い方。factor化・case_when・ワンホット（ダミー）エンコーディング・ダミー変数トラップ。</div>
       <div class="card-topics"><span class="topic-tag">factor</span><span class="topic-tag">ワンホット</span><span class="topic-tag">ダミー</span></div>
+      <div style="margin-top:.4rem;"><a href="ch6_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第6章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch7.html" class="chapter-card c-purple fade-in stagger-2">
@@ -126,6 +151,7 @@
       <div class="card-title">日付データの処理</div>
       <div class="card-desc">日付列から年・月・日を取り出す。lubridateライブラリ・月をfactorに・~.（全変数）モデル・カテゴリ変数の一般化VIF（GVIF）。</div>
       <div class="card-topics"><span class="topic-tag">lubridate</span><span class="topic-tag">年月日</span><span class="topic-tag">GVIF</span></div>
+      <div style="margin-top:.4rem;"><a href="ch7_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第7章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch8.html" class="chapter-card c-red fade-in stagger-1">
@@ -133,6 +159,7 @@
       <div class="card-title">交互作用（Interaction）</div>
       <div class="card-desc">2つの変数の「組み合わせ効果」。多重共線性との違い・運動×食事の例・Rでの * と : ・交互作用項を含む式での予測計算。</div>
       <div class="card-topics"><span class="topic-tag">組み合わせ効果</span><span class="topic-tag">*と:</span><span class="topic-tag">予測</span></div>
+      <div style="margin-top:.4rem;"><a href="ch8_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第8章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch9.html" class="chapter-card c-green fade-in stagger-2">
@@ -140,6 +167,7 @@
       <div class="card-title">変数選択：前進選択（Forward）</div>
       <div class="card-desc">最良の予測変数を選ぶ。全部分集合回帰がなぜ無理か・1つずつ足していく前進選択・step関数・AIC / BICで自動化。</div>
       <div class="card-topics"><span class="topic-tag">前進選択</span><span class="topic-tag">step関数</span><span class="topic-tag">AIC</span></div>
+      <div style="margin-top:.4rem;"><a href="ch9_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第9章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
     <a href="ch10.html" class="chapter-card c-yellow fade-in stagger-1">
@@ -147,6 +175,7 @@
       <div class="card-title">変数選択：後退選択（Backward）</div>
       <div class="card-desc">全部入りから1つずつ削る。最も非有意な変数をp値で除去・step関数で自動後退・前進との違い・多重共線性は別途要対処。</div>
       <div class="card-topics"><span class="topic-tag">後退選択</span><span class="topic-tag">p値</span><span class="topic-tag">step関数</span></div>
+      <div style="margin-top:.4rem;"><a href="ch10_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第10章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
   </div>
@@ -192,5 +221,39 @@
   <p>🚲 SU1 Data Analytics M5 講義をもとに作成 · <strong>重回帰分析 完全ガイド</strong></p>
   <p style="margin-top:.5rem;"><a href="ch1.html">第1章から学習スタート →</a></p>
 </footer>
+
+<script>
+// Build the two-version index table
+(function(){
+  var chapters = [
+    ['1',   '📈', '重回帰分析', 'ch1'],
+    ['2',   '🩺', '診断', 'ch2'],
+    ['3',   '⚖️', '標準化回帰係数', 'ch3'],
+    ['3.1', '🎯', '影響点分析', 'ch3_1'],
+    ['4',   '🔗', '多重共線性とVIF', 'ch4'],
+    ['5',   '〰️', '多項式回帰', 'ch5'],
+    ['6',   '🏷️', 'カテゴリ変数の変換', 'ch6'],
+    ['7',   '📅', '日付データの処理', 'ch7'],
+    ['8',   '✖️', '交互作用', 'ch8'],
+    ['9',   '➡️', '変数選択：前進選択', 'ch9'],
+    ['10',  '⬅️', '変数選択：後退選択', 'ch10']
+  ];
+  var btn = function(href, label, bg, color){
+    return '<a href="'+href+'" style="display:inline-block;padding:.35rem .8rem;border-radius:20px;'
+      +'font-size:.8rem;font-weight:700;text-decoration:none;background:'+bg+';color:'+color+';">'+label+'</a>';
+  };
+  var rows = chapters.map(function(c, i){
+    var num=c[0], icon=c[1], title=c[2], base=c[3];
+    var zebra = (i%2===1) ? 'background:var(--bg);' : '';
+    return '<tr style="border-bottom:1px solid var(--border);'+zebra+'">'
+      + '<td style="padding:.55rem .75rem;font-weight:800;color:var(--text-sec);">'+num+'</td>'
+      + '<td style="padding:.55rem .75rem;">'+icon+' '+title+'</td>'
+      + '<td style="text-align:center;padding:.55rem .5rem;">'+btn(base+'.html','本編', 'var(--primary-light)','var(--primary-dark)')+'</td>'
+      + '<td style="text-align:center;padding:.55rem .5rem;">'+btn(base+'_easy.html','やさしい版', 'var(--teal-light)','#0e7490')+'</td>'
+      + '</tr>';
+  }).join('');
+  document.getElementById('vi-body').innerHTML = rows;
+})();
+</script>
 </body>
 </html>
