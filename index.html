@@ -22,6 +22,8 @@
     <span class="navg"><a class="n-main" href="ch8.html">✖️ 8</a><a class="n-easy" href="ch8_easy.html" title="やさしい版">🍎</a></span>
     <span class="navg"><a class="n-main" href="ch9.html">➡️ 9</a><a class="n-easy" href="ch9_easy.html" title="やさしい版">🍎</a></span>
     <span class="navg"><a class="n-main" href="ch10.html">⬅️ 10</a><a class="n-easy" href="ch10_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch11.html">🔀 11</a><a class="n-easy" href="ch11_easy.html" title="やさしい版">🍎</a></span>
+    <span class="navg"><a class="n-main" href="ch12.html">🎓 12</a><a class="n-easy" href="ch12_easy.html" title="やさしい版">🍎</a></span>
   </nav>
 </header>
 
@@ -31,7 +33,7 @@
     <p>1つの予測変数では足りない。湿度・気温・風速・曜日・天気…たくさんの手がかりを使って「自転車レンタル数」を予測する。Rで学ぶ実践的な重回帰分析を、ゼロからやさしく。</p>
     <div class="hero-badges">
       <span class="badge">🚲 自転車レンタル予測で学ぶ</span>
-      <span class="badge">🎓 全11章</span>
+      <span class="badge">🎓 全13章</span>
       <span class="badge">🍎 小学生にもわかる説明つき</span>
       <span class="badge">✏️ MCQ確認テスト</span>
     </div>
@@ -178,10 +180,26 @@
       <div style="margin-top:.4rem;"><a href="ch10_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第10章 超やさしい版 →</a></div>
       <div class="card-arrow">→</div>
     </a>
+    <a href="ch11.html" class="chapter-card c-teal fade-in stagger-1">
+      <div class="card-num">第11章</div><div class="card-icon">🔀</div>
+      <div class="card-title">ステップワイズ＆階層的選択</div>
+      <div class="card-desc">前進と後退を同時に行うステップワイズ（足す＋削る）・direction="both"・p_enter/p_remove・理論で順番を決める階層的選択・オッカムの剃刀。</div>
+      <div class="card-topics"><span class="topic-tag">ステップワイズ</span><span class="topic-tag">both</span><span class="topic-tag">階層的</span><span class="topic-tag">パーシモニー</span></div>
+      <div style="margin-top:.4rem;"><a href="ch11_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第11章 超やさしい版 →</a></div>
+      <div class="card-arrow">→</div>
+    </a>
+    <a href="ch12.html" class="chapter-card c-blue fade-in stagger-2">
+      <div class="card-num">第12章</div><div class="card-icon">🎓</div>
+      <div class="card-title">モデル性能の評価</div>
+      <div class="card-desc">未知データでの汎化性能を測る。過学習（オーバーフィッティング）・訓練/テスト分割（80:20）・set.seedで再現性・データ漏洩の防ぎ方。最終章！</div>
+      <div class="card-topics"><span class="topic-tag">過学習</span><span class="topic-tag">訓練/テスト</span><span class="topic-tag">汎化</span><span class="topic-tag">データ漏洩</span></div>
+      <div style="margin-top:.4rem;"><a href="ch12_easy.html" style="font-size:.78rem;font-weight:700;color:var(--teal);text-decoration:none;background:var(--teal-light);padding:.28rem .65rem;border-radius:20px;">🍎 第12章 超やさしい版 →</a></div>
+      <div class="card-arrow">→</div>
+    </a>
   </div>
 
   <div class="quick-ref fade-in">
-    <h3>🗺️ 全11章マップ — このガイドで学ぶこと</h3>
+    <h3>🗺️ 全13章マップ — このガイドで学ぶこと</h3>
     <div style="font-size:.75rem;font-weight:700;color:#475569;margin-bottom:.5rem;letter-spacing:.05em;">🧱 基礎（モデルを作る・評価する）</div>
     <div class="techniques-list" style="margin-bottom:1rem;">
       <div class="technique-item">📈 重回帰モデル</div>
@@ -236,7 +254,9 @@
     ['7',   '📅', '日付データの処理', 'ch7'],
     ['8',   '✖️', '交互作用', 'ch8'],
     ['9',   '➡️', '変数選択：前進選択', 'ch9'],
-    ['10',  '⬅️', '変数選択：後退選択', 'ch10']
+    ['10',  '⬅️', '変数選択：後退選択', 'ch10'],
+    ['11',  '🔀', 'ステップワイズ＆階層的選択', 'ch11'],
+    ['12',  '🎓', 'モデル性能の評価', 'ch12']
   ];
   var btn = function(href, label, bg, color){
     return '<a href="'+href+'" style="display:inline-block;padding:.35rem .8rem;border-radius:20px;'
