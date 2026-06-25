@@ -1,310 +1,402 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
-<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>第2章 診断 — 重回帰分析 完全ガイド</title>
-<link href="style.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第2章 診断 — 重回帰分析 完全ガイド（M5）</title>
+<link rel="stylesheet" href="m6.css">
 </head>
 <body>
-<header class="site-header">
-<div class="logo">重回帰分析 <span>完全ガイド</span></div>
-<nav class="header-nav">
-<a href="index.html">🏠 概要</a>
-<span class="navg"><a class="n-main" href="ch1.html">📈 1</a><a class="n-easy" href="ch1_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main active" href="ch2.html">🩺 2</a><a class="n-easy" href="ch2_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch3.html">⚖️ 3</a><a class="n-easy" href="ch3_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch3_1.html">🎯 3.1</a><a class="n-easy" href="ch3_1_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch4.html">🔗 4</a><a class="n-easy" href="ch4_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch5.html">〰️ 5</a><a class="n-easy" href="ch5_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch6.html">🏷️ 6</a><a class="n-easy" href="ch6_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch7.html">📅 7</a><a class="n-easy" href="ch7_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch8.html">✖️ 8</a><a class="n-easy" href="ch8_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch9.html">➡️ 9</a><a class="n-easy" href="ch9_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch10.html">⬅️ 10</a><a class="n-easy" href="ch10_easy.html" title="やさしい版">🍎</a></span>
-    <span class="navg"><a class="n-main" href="ch11.html">🔀 11</a><a class="n-easy" href="ch11_easy.html" title="やさしい版">🍎</a></span>
-    <span class="navg"><a class="n-main" href="ch12.html">🎓 12</a><a class="n-easy" href="ch12_easy.html" title="やさしい版">🍎</a></span>
-  </nav>
+
+<nav class="topnav">
+  <div class="brand"><b>重回帰分析</b> 完全ガイド</div>
+  <div class="tabs">
+    <a class="tab home" href="index.html">🏠 概要</a>
+    <a class="tab" href="ch1.html">1</a>
+    <a class="tab active" href="ch2.html">2</a>
+    <a class="tab" href="ch3.html">3</a>
+    <a class="tab" href="ch3_1.html">3.1</a>
+    <a class="tab" href="ch4.html">4</a>
+    <a class="tab" href="ch5.html">5</a>
+    <a class="tab" href="ch6.html">6</a>
+    <a class="tab" href="ch7.html">7</a>
+    <a class="tab" href="ch8.html">8</a>
+    <a class="tab" href="ch9.html">9</a>
+    <a class="tab" href="ch10.html">10</a>
+    <a class="tab" href="ch11.html">11</a>
+    <a class="tab" href="ch12.html">12</a>
+    <a class="tab easy" href="ch2_easy.html">🍎 やさしい版</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="chap">Chapter 2 · Diagnostics</div>
+    <h1>モデルは作れた。<br>でも<span class="g">良いモデル</span>か、<br>どう見抜く？</h1>
+    <p class="sub">重回帰では予測変数の候補がたくさん。4つ入りより2つだけのほうが良いこともあります。
+    講師の鉄則は「<strong>1つの指標（特にp値だけ！）に頼らず、ホリスティック（全体的）に判断する</strong>」。
+    気温だけのモデルと、気温＋湿度＋風速のモデルを、6つの指標で“健康診断”します。</p>
+    <div class="jump">
+      <a href="#u1">① なぜ診断か</a>
+      <a href="#u2">② 調整済みR²</a>
+      <a href="#u3">③ AICとBIC</a>
+      <a href="#u4">④ SとRMSE</a>
+      <a href="#u5">⑤ F統計量</a>
+      <a href="#u6">⑥ Cp・まとめ</a>
+      <a href="#quiz">📝 Quiz</a>
+    </div>
+    <br>
+    <a class="easy-hero" href="ch2_easy.html">🍎 コードが難しければ「超やさしい版」へ →</a>
+  </div>
 </header>
-<div class="ch-banner">
-<div class="ch-banner-inner">
-<div class="ch-tag">Chapter 2</div>
-<h1>🩺 診断（Diagnostics）</h1>
-<p>モデルは作れた。でも「これは良いモデル？」を、どう判断する？1つの指標に頼らず、調整済みR²・AIC・BIC・S・RMSE・F統計量・MallowのCpを総合的に見る方法を学ぶ。</p>
-<div class="unit-nav">
-<a href="#unit1">① なぜ診断が必要か</a>
-<a href="#unit2">② 調整済みR²</a>
-<a href="#unit3">③ AICとBIC</a>
-<a href="#unit4">④ SとRMSE</a>
-<a href="#unit5">⑤ F統計量</a>
-<a href="#unit6">⑥ MallowのCp</a>
-<a href="#quiz">📝 Quiz</a>
-</div>
-</div>
-</div>
-<div class="page-layout">
-<main>
-<div class="note-box" style="background:linear-gradient(135deg,var(--teal-light),#ecfeff);border-color:var(--teal);font-size:.95rem;">
-  🍎 <strong>「コードがちょっと難しい…」と感じたら？</strong> この章はコードの暗記は不要です。図と例え話だけで“特性”を理解できる
-  <a href="ch2_easy.html" style="color:var(--teal);font-weight:700;">▶ 第2章 超やさしい版</a>
-  を先に読むのがおすすめです。
-</div>
-<!-- UNIT 1 -->
-<div class="unit" id="unit1">
-<div class="unit-header">
-<div class="unit-num">①</div>
-<div><h2>なぜ「診断」が必要なのか</h2><div class="unit-sub">予測変数4つのモデルより、2つのモデルのほうが良いこともある</div></div>
-</div>
-<p>重回帰では、たくさんの予測変数の候補があります。でも<strong>「4つ入れたモデル」より「2つだけのモデル」のほうが良い</strong>ことも珍しくありません。では、どの予測変数を使うべきか、本当に良い予測ができているのかを、どう判断するのでしょう？</p>
-<div class="warn-box">
-<strong>⚠️ p値だけに頼らない！</strong> 統計でよくある失敗は、<code>summary</code>の最後にある星（★ ★★ ★★★）＝小さなp値だけを見て「有意だからOK」と決めてしまうこと。<strong>診断は1つの指標に頼らず、複数を総合して（ホリスティックに）判断する</strong>のが鉄則です。
+
+<!-- U1 -->
+<section id="u1">
+  <div class="wrap reveal">
+    <div class="eyebrow">Why · なぜ診断が必要か</div>
+    <h2>1つの指標に頼らない</h2>
+    <p class="lead">重回帰には予測変数の候補がたくさん。でも<strong>「4つ入り」より「2つだけ」のほうが良い</strong>こともあります。
+    では、どのモデルを選ぶべきか、本当に良い予測ができているのか？それを見抜くのが「診断」です。</p>
+
+    <div class="callout warn">
+      <div class="ctitle">⚠️ p値だけに頼らない（統計のよくある落とし穴）</div>
+      講師いわく、統計では <code>summary</code> の末尾にある<strong>星（★ ★★ ★★★＝小さなp値）だけを見て「有意だからOK」</strong>と決めてしまいがち。
+      でも診断は<strong>複数の指標を総合して（ホリスティックに）</strong>判断するのが鉄則です。
+    </div>
+    <p>診断には多くの道具があります。<strong>残差分析</strong>（quick plot で出る残差プロット）、<strong>影響点分析</strong>（<a href="ch3_1.html">第3.1章</a>）、
+    <strong>VIF／多重共線性</strong>（<a href="ch4.html">第4章</a>）は別の章で扱います。この章で扱うのは、<strong>モデルAとBのどちらが良いかを比べる“中間の指標たち”</strong>です。</p>
+
+    <div class="compare">
+      <div class="ccard a"><h4>モデルA（単回帰）</h4><ul><li>気温だけ</li><li>シンプル</li><li>説明力は？</li></ul></div>
+      <div class="ccard b"><h4>モデルB（重回帰）</h4><ul><li>気温＋湿度＋風速</li><li>情報は多い</li><li>本当に良くなった？</li></ul></div>
+    </div>
+    <p style="text-align:center;color:var(--muted);margin-top:10px">この2つを、これから6つの指標で“健康診断”します。</p>
+
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      診断はお医者さんの「健康診断」。体温だけ見て健康とは言えません。身長・体重・血圧・心拍…
+      いろんな数値を<strong>合わせて</strong>見るから本当の状態がわかります。モデルも同じです🩺
+    </div>
   </div>
-<p>この章では、モデルAとモデルBを比べる代表的な診断指標を学びます。例として2つのモデルを比較します。</p>
-<div class="flow-diagram">
-<div class="flow-box input">モデルA（単回帰）<br/><small>気温だけ</small></div>
-<span class="flow-arrow">vs</span>
-<div class="flow-box model">モデルB（重回帰）<br/><small>気温＋湿度＋風速</small></div>
-<span class="flow-arrow">→</span>
-<div class="flow-box output">どっちが良い？<br/><small>指標で判定</small></div>
-</div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>診断は、お医者さんの「健康診断」みたいなもの。体温だけ見て健康とは言えませんよね。身長・体重・血圧・心拍…いろんな数値を<strong>合わせて</strong>見るから、本当の健康状態がわかります。モデルも同じで、いろんな指標を合わせて「良いモデルか」を診断します🩺</p>
-</div>
-</div>
-<!-- UNIT 2 -->
-<div class="unit" id="unit2">
-<div class="unit-header">
-<div class="unit-num">②</div>
-<div><h2>調整済みR²（高いほど良い ⬆️）</h2><div class="unit-sub">無駄な変数を入れると「ペナルティ」がかかる賢いR²</div></div>
-</div>
-<p>ふつうの<strong>R²</strong>には弱点があります。<strong>変数を増やすだけで、無意味な変数でもR²は上がってしまう</strong>のです。たとえば家の価格を予測するのに「ドアノブの数」や「ドアノブの平均直径」を入れても、R²は上がります（でも価格とは関係ない！）。</p>
-<p>そこで重回帰では<strong>調整済みR²</strong>を使います。これは<strong>役に立たない変数を入れるとペナルティを与えて、水増しされたR²を下げる</strong>賢い指標です。</p>
-<div class="code-block"><span class="cl"><span class="cm"># 調整済みR²を取り出す（高いほうが良い）</span></span><span class="cl"><span class="kw">summary</span>(temp_model)<span class="kw">$</span>adj.r.squared        <span class="cm"># 気温だけ</span></span><span class="cl"><span class="kw">summary</span>(bikes_model_1)<span class="kw">$</span>adj.r.squared     <span class="cm"># 気温+湿度+風速</span></span></div>
-<div class="output-text">気温だけ        : 0.50（くらい）
-気温+湿度+風速  : 0.52（くらい）← 増えた！</div>
-<p>重回帰モデルのほうが調整済みR²が高くなりました。つまり<strong>湿度と風速を知ることで、レンタル数の予測がよくなる</strong>ということです。</p>
-<div class="viz">
-<div class="viz-title">R² と 調整済みR² の違い（無駄な変数を足すと…）</div>
-<svg style="width:100%;max-width:520px;display:block;margin:0 auto;" viewbox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
-<line stroke="#94a3b8" stroke-width="1.5" x1="50" x2="500" y1="170" y2="170"></line>
-<line stroke="#94a3b8" stroke-width="1.5" x1="50" x2="50" y1="20" y2="170"></line>
-<text fill="#64748b" font-size="11" text-anchor="middle" x="270" y="195">追加した変数の数 →</text>
-<!-- R² always rises -->
-<path class="draw" d="M50,150 Q200,70 500,45" fill="none" stroke="#dc2626" stroke-width="3"></path>
-<text fill="#dc2626" font-size="11" font-weight="700" x="430" y="38">R²（上がり続ける）</text>
-<!-- adj R² rises then falls -->
-<path class="draw" d="M50,150 Q190,72 300,75 Q420,80 500,115" fill="none" stroke="#059669" stroke-width="3" style="animation-delay:.4s"></path>
-<text fill="#059669" font-size="11" font-weight="700" x="350" y="135">調整済みR²（無駄な変数で下がる）</text>
-</svg>
-<div class="viz-cap">R²は変数を足すほど必ず上がる。調整済みR²は「役に立つ変数」では上がり、「無駄な変数」では下がる。</div>
-</div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>R²は「荷物をいくら詰めても文句を言わないカバン」。調整済みR²は「いらない荷物を入れると重くなって怒るカバン」。だから本当に必要なものだけ入れるようになります🎒</p>
-</div>
-</div>
-<!-- UNIT 3 -->
-<div class="unit" id="unit3">
-<div class="unit-header">
-<div class="unit-num">③</div>
-<div><h2>AIC と BIC（低いほど良い ⬇️）</h2><div class="unit-sub">「当てはまりの良さ」と「シンプルさ」のバランス</div></div>
-</div>
-<h3>AIC（赤池情報量規準）</h3>
-<p><strong>AIC（Akaike Information Criterion）</strong>は、<strong>「データへの当てはまりの良さ」と「モデルの複雑さ」のバランス</strong>を取ろうとする指標です。データによく合うけど、複雑すぎて過学習（オーバーフィット）にならないモデルを好みます。</p>
-<ul>
-<li>覚えること①：<strong>当てはまりと複雑さのバランス</strong>を取る。</li>
-<li>覚えること②：<strong>AICは低いほうが良い ⬇️</strong>。</li>
-<li>AICは<strong>相対的な指標</strong>。数値の絶対値（例：10,000）には意味がなく、<strong>他のモデルと比べる</strong>ためだけに使う。</li>
-</ul>
-<div class="code-block"><span class="cl"><span class="kw">AIC</span>(temp_model)        <span class="cm"># 気温だけ</span></span><span class="cl"><span class="kw">AIC</span>(bikes_model_1)     <span class="cm"># 気温+湿度+風速 ← こちらが少し低い＝良い</span></span></div>
-<h3>BIC（ベイズ情報量規準）</h3>
-<p><strong>BIC（Bayesian Information Criterion）</strong>はAICの仲間ですが、<strong>複雑さへのペナルティがもっと強い</strong>のが特徴。よりシンプルな（パーシモニアスな）モデルを好みます。Rでは大文字で <code>BIC()</code> と書きます（小文字だとエラー）。</p>
-<div class="code-block"><span class="cl"><span class="kw">BIC</span>(temp_model)</span><span class="cl"><span class="kw">BIC</span>(bikes_model_1)   <span class="cm"># こちらが低い＝重回帰モデルが好まれる</span></span></div>
-<div class="note-box">
-<strong>📌 AIC vs BIC：</strong>どちらも「低いほど良い」。違いは<strong>BICのほうがシンプルさを強く求める</strong>こと。たくさんの変数を入れたモデルだと、BICはAICより少ない変数を選びがちです。
+</section>
+
+<!-- U2 Adjusted R² interactive -->
+<section id="u2" style="background:#fff;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">調整済みR²（高いほど良い ⬆️）</div>
+    <h2>無駄な変数を足すと、<br>2つのR²は逆方向に動く</h2>
+    <p class="lead">ふつうの<strong>R²</strong>の弱点は、<strong>役に立たない変数を足してもR²が上がってしまう</strong>こと。
+    講師の例：家の価格を予測するのに「<strong>ドアノブの数</strong>」や「<strong>ドアノブの平均直径</strong>」を入れても、価格とは無関係なのにR²は上がる。
+    <strong>調整済みR²</strong>は、こうした役立たない予測変数に<strong>ペナルティ</strong>を与えて、水増しされたR²を下げます。</p>
+
+    <div class="machine">
+      <div class="slider-row o">
+        <label>足した「無駄な変数」の数</label>
+        <input type="range" id="s-junk" min="0" max="8" value="0">
+        <div class="val" id="v-junk">0 個</div>
+      </div>
+      <div class="svgwrap">
+        <svg id="r2svg" viewBox="0 0 640 300" style="width:100%;max-width:640px;display:block;margin:0 auto"></svg>
+      </div>
+      <div style="font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:center;margin-top:4px">※ 概念を示す<strong>イメージ図</strong>（傾向を表すための値）</div>
+      <div class="readouts">
+        <div class="ro p"><div class="lab">R²（ふつう）</div><div class="big" id="ro-r2">0.520</div><div class="meaning">変数を足すほど必ず上がる</div></div>
+        <div class="ro g"><div class="lab">調整済み R²</div><div class="big" id="ro-ar2">0.520</div><div class="meaning" id="me-ar2">無駄な変数では下がる</div></div>
+        <div class="ro l"><div class="lab">差（水増し分）</div><div class="big" id="ro-gap">0.000</div><div class="meaning">この差が大きい＝水増し</div></div>
+      </div>
+    </div>
+
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="cm"># 調整済みR²を取り出す（高いほうが良い）。$ で直接アクセス</span></span></div>
+      <div class="ln"><span class="n">2</span><span class="c"><span class="fn">summary</span>(temp_model)<span class="kw">$</span>adj.r.squared        <span class="cm"># 気温だけ</span></span></div>
+      <div class="ln"><span class="n">3</span><span class="c"><span class="fn">summary</span>(bikes_model_1)<span class="kw">$</span>adj.r.squared     <span class="cm"># 気温+湿度+風速（少し増えた）</span></span></div>
+    </div>
+    <p>結果、重回帰のほうが調整済みR²が（大きくはないが）<strong>増えました</strong>。講師いわく「<strong>湿度と風速を知ることで、レンタル数の予測がよくなる</strong>」。
+    ただし、ここで<strong>無駄な</strong>変数を足すと、上のグラフのように調整済みR²は逆に下がっていきます。</p>
+
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      R²は「荷物をいくら詰めても文句を言わないカバン」。調整済みR²は「いらない荷物を入れると重くなって怒るカバン」。
+      だから本当に必要なものだけ入れるようになります🎒
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>AICとBICは「テストの採点者」。当てはまりが良いと加点、でも答案が長すぎ（複雑すぎ）ると減点します。<strong>BICは特に厳しい先生</strong>で、「もっと短く、シンプルに！」と求めます。点数（AIC/BIC）は低いほど良い＝ゴルフのスコアと同じ⛳</p>
-</div>
-</div>
-<!-- UNIT 4 -->
-<div class="unit" id="unit4">
-<div class="unit-header">
-<div class="unit-num">④</div>
-<div><h2>残差標準誤差 S と RMSE（低いほど良い ⬇️）</h2><div class="unit-sub">予測が実際の点からどれだけ離れているか</div></div>
-</div>
-<p><strong>残差</strong>は「回帰線から観測点までの距離」でしたね。この距離が大きいほど誤差が大きい。だから<strong>残差標準誤差 S は小さいほど良い ⬇️</strong>。すべての点が線の近くにある＝良いモデルです。</p>
-<div class="code-block"><span class="cl"><span class="cm"># summary の "Residual standard error" がS（例: 1509）</span></span><span class="cl"><span class="kw">summary</span>(temp_model)<span class="kw">$</span>sigma</span><span class="cl"><span class="kw">summary</span>(bikes_model_1)<span class="kw">$</span>sigma   <span class="cm"># こちらが小さい＝良い</span></span></div>
-<h3>RMSE（二乗平均平方根誤差）</h3>
-<p>Rには <code>RMSE</code> の組み込み関数が無いので自作します。やることは名前の通り：<strong>残差（実際−予測）を二乗 → 平均 → 平方根</strong>（Root-Mean-Square-Error）。最後に平方根を取るのは、二乗で変わった単位を元に戻すためです。</p>
-<div class="code-block"><span class="cl">calculate_rmse <span class="kw">&lt;-</span> <span class="kw">function</span>(actual, predicted) {</span><span class="cl">  residuals <span class="kw">&lt;-</span> actual <span class="kw">-</span> predicted   <span class="cm"># 残差</span></span><span class="cl"> <span class="kw">sqrt</span>(<span class="kw">mean</span>(residuals<span class="kw">^</span><span class="nm">2</span>))      <span class="cm"># 二乗→平均→平方根</span></span><span class="cl">}</span><span class="cl">calculate_rmse(bikes<span class="kw">$</span>rentals, bikes_model_1<span class="kw">$</span>fitted.values)</span></div>
-<div class="note-box">
-<strong>📌 S と RMSE の関係：</strong>大きなデータセットでは、<strong>S と RMSE はほぼ同じ値に近づきます</strong>（例：1509 と 1507）。どちらも重回帰モデルのほうが小さく、より良いことを示しました。
+</section>
+
+<!-- U3 AIC/BIC -->
+<section id="u3">
+  <div class="wrap reveal">
+    <div class="eyebrow">AIC & BIC（低いほど良い ⬇️）</div>
+    <h2>「当てはまり」と「シンプルさ」の<br>バランスを採点する</h2>
+    <p class="lead"><strong>AIC（赤池情報量規準）</strong>は、<strong>データへの当てはまりの良さ</strong>と<strong>モデルの複雑さ</strong>のバランスを取ろうとする指標。
+    データによく合うけれど、複雑すぎて過学習にならないモデルを好みます。</p>
+
+    <div class="grid2">
+      <div class="card">
+        <h4 style="color:var(--p)">AIC</h4>
+        <ul style="margin:0;padding-left:1.1em;font-size:.92rem">
+          <li>当てはまり × 複雑さ のバランス</li>
+          <li><strong>低いほど良い ⬇️</strong></li>
+          <li><strong>相対指標</strong>：絶対値（例10,000）に意味はなく、他モデルと比べるためだけに使う</li>
+          <li>式はノートブック末尾の「formulas」に。<strong>暗記不要</strong>（興味があれば導出を参照）</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4 style="color:var(--l)">BIC</h4>
+        <ul style="margin:0;padding-left:1.1em;font-size:.92rem">
+          <li>AICの仲間。<strong>複雑さへの罰がもっと強い</strong></li>
+          <li>よりシンプルな（パーシモニアスな）モデルを好む</li>
+          <li>Rでは<strong>大文字</strong> <code>BIC()</code>（小文字はエラー）</li>
+          <li>別名 <strong>SBC</strong> とも呼ばれる</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="fn">AIC</span>(temp_model)        <span class="cm"># 気温だけ</span></span></div>
+      <div class="ln"><span class="n">2</span><span class="c"><span class="fn">AIC</span>(bikes_model_1)     <span class="cm"># 気温+湿度+風速 ← こちらが少し低い＝良い</span></span></div>
+      <div class="ln"><span class="n">3</span><span class="c"><span class="fn">BIC</span>(bikes_model_1)     <span class="cm"># BICでも重回帰が好まれる（lowercase はエラー）</span></span></div>
+    </div>
+
+    <div class="callout info">
+      <div class="ctitle">📌 AIC vs BIC</div>
+      どちらも「低いほど良い」。違いは<strong>BICのほうがシンプルさを強く求める</strong>こと。変数が多いモデルでは、BICはAICより少ない変数を選びがちです。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      AICとBICは「テストの採点者」。当てはまりが良いと加点、答案が長すぎ（複雑すぎ）ると減点。
+      <strong>BICは特に厳しい先生</strong>。点数は低いほど良い＝ゴルフのスコアと同じ⛳
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>ダーツで的の中心からどれだけ外れたか、を平均したのがRMSE。中心に近いほど（＝Sが小さいほど）上手なプレイヤー＝良いモデルです🎯</p>
-</div>
-</div>
-<!-- UNIT 5 -->
-<div class="unit" id="unit5">
-<div class="unit-header">
-<div class="unit-num">⑤</div>
-<div><h2>F統計量（モデル全体の検定）</h2><div class="unit-sub">「予測変数は全部ゼロ＝無意味」を否定できるか</div></div>
-</div>
-<p><code>summary</code>の最後に出る<strong>F統計量</strong>は、<strong>モデル全体の当てはまり</strong>を検定します（ANOVAと同じ考え方で「オムニバス検定」と呼ばれます）。</p>
-<ul>
-<li><strong>帰無仮説 H₀：</strong>すべての係数がゼロ＝どの予測変数も応答変数と統計的に有意な関係がない。</li>
-<li><strong>対立仮説 H₁：</strong>少なくとも1つの係数はゼロではない。</li>
-<li><strong>Fが大きい</strong>＝予測変数を入れたモデルのほうが、入れないモデルよりよく当てはまる。</li>
-<li>p値が有意水準（α）より小さければ帰無仮説を棄却。</li>
-</ul>
-<div class="warn-box">
-<strong>⚠️ 大事な注意：</strong>F統計量が有意でも、<strong>すべての予測変数が有意とは限りません</strong>。これは「モデル全体」を見るオムニバス検定。「少なくとも1つは有意」とわかるだけで、<strong>どれが一番効いているか</strong>はさらに分析が必要です。
+</section>
+
+<!-- U4 S/RMSE -->
+<section id="u4" style="background:#fff;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">S & RMSE（低いほど良い ⬇️）</div>
+    <h2>予測は、実際の点から<br>どれだけ離れている？</h2>
+    <p class="lead"><strong>残差</strong>は「回帰線から観測点までの距離」。距離が大きいほど誤差が大きい。
+    だから<strong>残差標準誤差 S は小さいほど良い</strong>。すべての点が線の近くにある＝良いモデルです。
+    <code>summary</code> では <strong>Residual standard error: 1509</strong> のように出ます。</p>
+
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="cm"># summary の "Residual standard error"（例: 1509）。$sigma で取り出す</span></span></div>
+      <div class="ln"><span class="n">2</span><span class="c"><span class="fn">summary</span>(bikes_model_1)<span class="kw">$</span>sigma   <span class="cm"># 重回帰のほうが小さい＝良い</span></span></div>
+    </div>
+
+    <h3>RMSE（二乗平均平方根誤差）は自作する</h3>
+    <p>Rに <code>RMSE</code> の組み込み関数は無いので関数を作ります。やることは名前の通り：
+    <strong>残差（実際−予測）を二乗 → 平均 → 平方根</strong>（<u>R</u>oot-<u>M</u>ean-<u>S</u>quare-<u>E</u>rror）。
+    最後に平方根を取るのは、二乗で変わった単位を元に戻すためです。</p>
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c">calculate_rmse <span class="kw">&lt;-</span> <span class="kw">function</span>(actual, predicted) {</span></div>
+      <div class="ln"><span class="n">2</span><span class="c">  residuals <span class="kw">&lt;-</span> actual <span class="kw">-</span> predicted     <span class="cm"># 残差</span></span></div>
+      <div class="ln"><span class="n">3</span><span class="c">  <span class="fn">sqrt</span>(<span class="fn">mean</span>(residuals<span class="kw">^</span><span class="nm">2</span>))        <span class="cm"># 二乗→平均→平方根</span></span></div>
+      <div class="ln"><span class="n">4</span><span class="c">}</span></div>
+      <div class="ln"><span class="n">5</span><span class="c">calculate_rmse(bikes<span class="kw">$</span>rentals, bikes_model_1<span class="kw">$</span>fitted.values)</span></div>
+    </div>
+    <div class="callout info">
+      <div class="ctitle">📌 S と RMSE の関係</div>
+      大きなデータセットでは <strong>S と RMSE はほぼ同じ値</strong>に近づきます。講義では <strong>S＝1509、RMSE＝1507</strong>。
+      どちらも重回帰のほうが小さく、良いと示しました。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      ダーツで的の中心からどれだけ外れたかを平均したのがRMSE。中心に近いほど（＝Sが小さいほど）上手なプレイヤー＝良いモデルです🎯
+    </div>
   </div>
-<div class="code-block"><span class="cl"><span class="kw">summary</span>(bikes_model_1)<span class="kw">$</span>fstatistic</span><span class="cl"><span class="cm"># 分子と分母の自由度も一緒に返ってくる</span></span></div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>F統計量は「このチーム、誰か1人でも仕事してる？」という質問。答えが「YES（少なくとも1人は働いてる）」だとわかるけど、<strong>誰が一番のエースか</strong>まではわからない。それは個別に調べる必要があります⚽</p>
-</div>
-</div>
-<!-- UNIT 6 -->
-<div class="unit" id="unit6">
-<div class="unit-header">
-<div class="unit-num">⑥</div>
-<div><h2>MallowのCp（予測変数の数と比べる）</h2><div class="unit-sub">過学習・過小学習を見抜く</div></div>
-</div>
-<p><strong>MallowのCp（Mallows' Cₚ）</strong>は、計算した値を<strong>予測変数の数</strong>と比べて判断します（数えるときは切片も含めます）。</p>
-<table class="compare-table">
-<tr><th>Cp の値</th><th>意味</th></tr>
-<tr><td><strong>Cp ≒ 予測変数の数</strong></td><td>✅ 良いモデル。過度に複雑にせずデータをよく説明している。</td></tr>
-<tr><td>Cp &gt; 予測変数の数</td><td>⚠️ 過学習（オーバーフィット）</td></tr>
-<tr><td>Cp &lt; 予測変数の数</td><td>⚠️ 過小学習（アンダーフィット）</td></tr>
-</table>
-<p>Rには組み込み関数が無いので自作します。例では、気温モデルも重回帰モデルも <strong>Cp＝予測変数の数（2）</strong> となり、どちらも良いモデルと判定されました。</p>
-<h3>📋 診断指標 まとめ</h3>
-<table class="compare-table">
-<tr><th>指標</th><th>良いのは</th><th>何を見る</th></tr>
-<tr><td>調整済みR²</td><td>高い ⬆️</td><td>無駄な変数を罰した説明力</td></tr>
-<tr><td>AIC</td><td>低い ⬇️</td><td>当てはまり×複雑さのバランス</td></tr>
-<tr><td>BIC</td><td>低い ⬇️</td><td>同上（シンプルさをより重視）</td></tr>
-<tr><td>S / RMSE</td><td>低い ⬇️</td><td>予測の平均的なズレ</td></tr>
-<tr><td>F統計量</td><td>大きい・p小 ⬆️</td><td>モデル全体が有意か</td></tr>
-<tr><td>MallowのCp</td><td>≒予測変数の数</td><td>過学習/過小学習</td></tr>
-</table>
-<div class="note-box">
-<strong>📌 結論：</strong>これらは代表的な指標の一部です。<strong>1つに頼らず複数を総合</strong>して、モデルAとBを比較しましょう。今回はすべての指標で「重回帰モデル」が（少しだけ）良いという結論でした。
+</section>
+
+<!-- U5 F -->
+<section id="u5">
+  <div class="wrap reveal">
+    <div class="eyebrow">F-statistic · モデル全体の検定</div>
+    <h2>「予測変数は全部ゼロ＝無意味」を<br>否定できるか</h2>
+    <p class="lead"><code>summary</code> の最後に出る<strong>F統計量</strong>（とても小さいp値が科学記法で出る）は、
+    モデル全体の当てはまりを検定します。ANOVAと同じ考え方で<strong>オムニバス検定</strong>と呼ばれます。</p>
+    <div class="grid2">
+      <div class="card">
+        <h4>仮説</h4>
+        <p style="margin:0;font-size:.92rem"><strong>H₀：</strong>すべての係数がゼロ＝どの予測変数もYと有意な関係がない。<br>
+        <strong>H₁：</strong>少なくとも1つの係数はゼロでない。</p>
+      </div>
+      <div class="card">
+        <h4>読み方</h4>
+        <p style="margin:0;font-size:.92rem"><strong>Fが大きい</strong>＝予測変数を入れたモデルのほうが、入れないモデルよりよく当てはまる。
+        p値が有意水準（α）より小さければ H₀ を棄却します。</p>
+      </div>
+    </div>
+    <div class="callout warn">
+      <div class="ctitle">⚠️ 大事な注意</div>
+      Fが有意でも<strong>すべての予測変数が有意とは限りません</strong>。これは「モデル全体」を見るオムニバス検定。
+      「少なくとも1つは有意」とわかるだけで、<strong>どれが一番効いているか</strong>はさらに分析が必要です。
+    </div>
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="fn">summary</span>(bikes_model_1)<span class="kw">$</span>fstatistic   <span class="cm"># F値＋分子/分母の自由度も返る</span></span></div>
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      F統計量は「このチーム、誰か1人でも仕事してる？」という質問。答えが「YES」とわかっても、
+      <strong>誰がエースか</strong>まではわからない。それは個別に調べます⚽
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>MallowのCpは「ちょうどいい荷物の量メーター」。荷物が多すぎ（過学習）でも少なすぎ（過小学習）でもダメ。<strong>ちょうど予測変数の数と同じ</strong>くらいが、バランスの取れた完璧な旅行カバンです🧳</p>
-</div>
-</div>
+</section>
+
+<!-- U6 Cp + summary -->
+<section id="u6" style="background:#fff;border-top:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Mallows' Cp ・ まとめ</div>
+    <h2>MallowのCp と、6指標の早見表</h2>
+    <p class="lead"><strong>MallowのCp</strong>は、計算値を<strong>予測変数の数</strong>と比べます（数えるときは<strong>切片も含む</strong>）。
+    Rに組み込み関数が無いので、データとモデルを渡して自作の関数で計算します。</p>
+    <table class="ctable">
+      <tr><th>Cp の値</th><th>意味</th></tr>
+      <tr><td><strong>Cp ≒ 予測変数の数</strong></td><td>✅ 良いモデル。フルモデル並みに説明しつつ、過度に複雑でない（残差もほぼ正規）。</td></tr>
+      <tr><td>Cp &gt; 予測変数の数</td><td>⚠️ 過学習（オーバーフィット）</td></tr>
+      <tr><td>Cp &lt; 予測変数の数</td><td>⚠️ 過小学習（アンダーフィット）</td></tr>
+    </table>
+    <p>講義の例：気温モデルは「切片＋気温」で<strong>Cp＝2、予測変数の数＝2</strong>。重回帰モデルも <strong>Cp＝予測変数の数</strong>。
+    どちらも「良いモデル」と判定されました。なお、ここで挙げた6つは<strong>代表的な指標の一部</strong>で、他にも多くの診断があります。</p>
+
+    <h3>📋 診断指標 まとめ（方向に注目）</h3>
+    <table class="ctable">
+      <tr><th>指標</th><th>良いのは</th><th>何を見る</th></tr>
+      <tr><td>調整済みR²</td><td>高い ⬆️</td><td>無駄な変数を罰した説明力</td></tr>
+      <tr><td>AIC</td><td>低い ⬇️</td><td>当てはまり×複雑さのバランス</td></tr>
+      <tr><td>BIC（=SBC）</td><td>低い ⬇️</td><td>同上（シンプルさをより重視）</td></tr>
+      <tr><td>S / RMSE</td><td>低い ⬇️</td><td>予測の平均的なズレ</td></tr>
+      <tr><td>F統計量</td><td>大きい・p小 ⬆️</td><td>モデル全体が有意か</td></tr>
+      <tr><td>MallowのCp</td><td>≒ 予測変数の数</td><td>過学習 / 過小学習</td></tr>
+    </table>
+    <div class="callout good">
+      <div class="ctitle">📌 結論</div>
+      <strong>1つに頼らず複数を総合</strong>して比較を。今回はすべての指標で「重回帰モデル」が（少しだけ）良いという結論でした。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      MallowのCpは「ちょうどいい荷物の量メーター」。多すぎ（過学習）でも少なすぎ（過小学習）でもダメ。
+      <strong>予測変数の数と同じくらい</strong>がベストな旅行カバンです🧳
+    </div>
+  </div>
+</section>
+
 <!-- QUIZ -->
-<div class="quiz-section" id="quiz">
-<div class="quiz-header">
-<h2>📝 第2章 確認クイズ</h2>
-<div class="quiz-score" id="score">0 / 5</div>
-</div>
-<div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-<div class="quiz-lang-note">📌 クイズは英語で出題されます（MCQ is in English）</div>
-<div class="quiz-q">
-<div class="q-num">Question 1 of 5</div>
-<div class="q-text">Why is adjusted R² preferred over plain R² in multiple regression?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">A</span> It can only ever be computed when the regression model contains exactly one predictor variable</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,1)"><span class="opt-letter">B</span> It penalizes the model for adding predictors that don't help, so it isn't inflated by useless variables</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">C</span> It is always larger than plain R², so it reports a more optimistic fit score for any given model</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">D</span> It ignores the response variable entirely and measures only the correlations among the predictors</button>
-</div>
-<div class="q-feedback" id="fb1"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 2 of 5</div>
-<div class="q-text">For AIC, BIC, and residual standard error (S), which direction is better?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">A</span> Higher is always better, because a bigger value means more variance explained</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">B</span> Lower is better for AIC and BIC, but a higher value of S indicates a better model</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">C</span> The absolute value of each must equal zero for the model to fit well</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,2)"><span class="opt-letter">D</span> Lower is better for all three of these measures</button>
-</div>
-<div class="q-feedback" id="fb2"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 3 of 5</div>
-<div class="q-text">How should the actual numeric value of AIC (e.g., 10,000) be interpreted?</div>
-<div class="options">
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,3)"><span class="opt-letter">A</span> The absolute value is meaningless on its own — AIC is only used to compare models relative to each other</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">B</span> It is the same as the p-value, so any AIC below 0.05 indicates a statistically significant model fit</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">C</span> It equals the total number of predictors in the model, including the intercept term that is added</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">D</span> An AIC below 5,000 always signals a good model, no matter what the other candidate models scored</button>
-</div>
-<div class="q-feedback" id="fb3"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 4 of 5</div>
-<div class="q-text">A significant overall F-statistic tells you that…</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">A</span> Every single predictor in the model is individually statistically significant</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">B</span> The model has no residual error left, so every prediction is exactly correct</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,4)"><span class="opt-letter">C</span> At least one predictor has a non-zero coefficient — but not which one(s)</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">D</span> Adjusted R² must equal 1, meaning the predictors explain all the variation</button>
-</div>
-<div class="q-feedback" id="fb4"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 5 of 5</div>
-<div class="q-text">Using Mallows' Cp, what indicates a well-specified model?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">A</span> Cp is much less than the number of predictors, signalling an overfitted model</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,5)"><span class="opt-letter">B</span> Cp is approximately equal to the number of predictors (including the intercept)</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">C</span> Cp equals zero, which shows the model has captured all of the variation</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">D</span> Cp is much greater than the number of predictors, showing a perfectly fit model</button>
-</div>
-<div class="q-feedback" id="fb5"></div>
-</div>
-<div class="page-nav">
-<a href="ch1.html">← 第1章：重回帰分析</a>
-<a href="ch3.html">第3章：標準化回帰係数 →</a>
-</div>
-</div>
-</main>
-<aside class="sidebar">
-<div class="glossary">
-<h3>📘 重要用語</h3>
-<div class="term-item"><div class="term-name">診断</div><div class="term-en">Diagnostics</div><div class="term-def">モデルの良し悪しを複数の指標で総合的に評価すること。</div></div>
-<div class="term-item"><div class="term-name">調整済みR²</div><div class="term-en">Adjusted R²</div><div class="term-def">無駄な予測変数にペナルティを与えたR²。高いほど良い。</div></div>
-<div class="term-item"><div class="term-name">AIC</div><div class="term-en">Akaike Information Criterion</div><div class="term-def">当てはまりと複雑さのバランス。低いほど良い。相対指標。</div></div>
-<div class="term-item"><div class="term-name">BIC</div><div class="term-en">Bayesian Information Criterion</div><div class="term-def">AICより複雑さへの罰が強い。シンプルなモデルを好む。</div></div>
-<div class="term-item"><div class="term-name">残差標準誤差S</div><div class="term-en">Residual Standard Error</div><div class="term-def">予測の平均的なズレ。小さいほど良い。大データではRMSEに近づく。</div></div>
-<div class="term-item"><div class="term-name">F統計量</div><div class="term-en">F-statistic</div><div class="term-def">モデル全体の有意性を見るオムニバス検定。</div></div>
-<div class="term-item"><div class="term-name">MallowのCp</div><div class="term-en">Mallows' Cp</div><div class="term-def">予測変数の数とほぼ等しいとき良いモデル。過/過小学習を検出。</div></div>
-</div>
-<div class="tip-box">
-<h4>💡 覚え方</h4>
-<p>
-<strong>高いほど良い ⬆️</strong>：調整済みR²、F<br/><br/>
-<strong>低いほど良い ⬇️</strong>：AIC、BIC、S、RMSE<br/><br/>
-<strong>ちょうどが良い ＝</strong>：MallowのCp<br/><br/>
-    1つに頼らず、全部を見て判断！
-    </p>
-</div>
-</aside>
-</div>
+<section id="quiz">
+  <div class="wrap reveal">
+    <div class="eyebrow">Check · 確認クイズ</div>
+    <h2>第2章 確認クイズ</h2>
+    <div class="quiz-note">📌 クイズは英語で出題されます（MCQ is in English）</div>
+    <div class="quiz" id="quiz2" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section style="background:#fff;border-top:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Glossary · 重要用語</div>
+    <h2 style="font-size:1.4rem">この章の用語</h2>
+    <div class="gloss">
+      <div class="term"><div class="tn">診断</div><div class="te">Diagnostics</div><div class="td">複数指標でモデルの良し悪しを総合評価すること。</div></div>
+      <div class="term"><div class="tn">調整済みR²</div><div class="te">Adjusted R²</div><div class="td">無駄な変数にペナルティを与えたR²。高いほど良い。</div></div>
+      <div class="term"><div class="tn">AIC</div><div class="te">Akaike Information Criterion</div><div class="td">当てはまり×複雑さ。低いほど良い。相対指標。</div></div>
+      <div class="term"><div class="tn">BIC / SBC</div><div class="te">Bayesian Information Criterion</div><div class="td">AICより複雑さへの罰が強い。シンプルを好む。大文字で。</div></div>
+      <div class="term"><div class="tn">残差標準誤差S</div><div class="te">Residual Standard Error</div><div class="td">予測の平均的ズレ。小さいほど良い。大データでRMSEに近づく。</div></div>
+      <div class="term"><div class="tn">F統計量</div><div class="te">F-statistic</div><div class="td">モデル全体の有意性を見るオムニバス検定（ANOVA的）。</div></div>
+      <div class="term"><div class="tn">MallowのCp</div><div class="te">Mallows' Cp</div><div class="td">予測変数の数（切片含む）とほぼ等しいとき良い。過/過小学習を検出。</div></div>
+    </div>
+    <div class="pagenav">
+      <a href="ch1.html">← 第1章：重回帰分析</a>
+      <a href="ch3.html">第3章：標準化回帰係数 →</a>
+    </div>
+  </div>
+</section>
+
 <footer>
-<p>重回帰分析 完全ガイド · 第2章：診断</p>
-<p style="margin-top:.5rem;"><a href="ch1.html">← 第1章</a> · <a href="ch3.html">第3章 →</a></p>
+  <p>🚲 重回帰分析 完全ガイド · 第2章：診断</p>
+  <p style="margin-top:.4rem"><a href="ch1.html">← 第1章</a> · <a href="ch3.html">第3章 →</a> · <a href="ch2_easy.html">🍎 やさしい版</a></p>
 </footer>
-<script src="quiz.js"></script>
-<script>setupQuiz({
-  1:"Correct! Plain R² rises even when you add useless predictors. Adjusted R² penalizes unhelpful predictors, so it isn't artificially inflated.",
-  2:"Correct! Lower is better for AIC, BIC, and S — they all measure error or complexity that you want to minimize.",
-  3:"Correct! AIC is relative. The raw number means nothing alone; you only compare it between competing models — lower wins.",
-  4:"Correct! The F-test is an omnibus test. A significant F means at least one coefficient is non-zero, but you still need further analysis to know which predictors matter.",
-  5:"Correct! When Cp ≈ the number of predictors (intercept included), the model is well-specified. Cp > p suggests overfitting; Cp < p suggests underfitting."
-});</script>
-<script src="typewriter.js"></script>
+
+<script src="m6.js"></script>
+<script>
+/* ---------- R² vs Adjusted R² interactive（概念図） ---------- */
+(function(){
+  var svg=document.getElementById('r2svg');
+  var W=640,H=300,PAD={l:54,r:20,t:20,b:46}, pW=W-PAD.l-PAD.r, pH=H-PAD.t-PAD.b;
+  var KMAX=8, YMIN=0.45, YMAX=0.60;
+  function r2(k){ return 0.52 + 0.04*(1-Math.exp(-k/4)); }
+  function ar2(k){ return r2(k) - k*0.012; }
+  function xOf(k){ return PAD.l + k/KMAX*pW; }
+  function yOf(v){ return PAD.t + (1-(v-YMIN)/(YMAX-YMIN))*pH; }
+  [0.45,0.50,0.55,0.60].forEach(function(v){
+    svg.appendChild(svgEl('line',{class:'grid',x1:PAD.l,y1:yOf(v),x2:PAD.l+pW,y2:yOf(v)}));
+    var t=svgEl('text',{class:'axlab',x:PAD.l-8,y:yOf(v)+4,'text-anchor':'end'}); t.textContent=v.toFixed(2); svg.appendChild(t);
+  });
+  for(var k=0;k<=KMAX;k+=2){ var t=svgEl('text',{class:'axlab',x:xOf(k),y:H-22,'text-anchor':'middle'}); t.textContent='+'+k; svg.appendChild(t); }
+  var xl=svgEl('text',{class:'axlab',x:PAD.l+pW,y:H-6,'text-anchor':'end'}); xl.textContent='足した無駄な変数の数 →'; svg.appendChild(xl);
+  svg.appendChild(svgEl('line',{class:'axis',x1:PAD.l,y1:PAD.t,x2:PAD.l,y2:PAD.t+pH}));
+  svg.appendChild(svgEl('line',{class:'axis',x1:PAD.l,y1:PAD.t+pH,x2:PAD.l+pW,y2:PAD.t+pH}));
+  function path(fn,color){ var d=''; for(var k=0;k<=KMAX;k+=0.25){ d+=(d===''?'M':'L')+xOf(k).toFixed(1)+' '+yOf(fn(k)).toFixed(1)+' '; } svg.appendChild(svgEl('path',{d:d,fill:'none',stroke:color,'stroke-width':3})); }
+  path(r2,'#2F77C9'); path(ar2,'#1FA37A');
+  var lr=svgEl('text',{x:xOf(8),y:yOf(r2(8))-8,'text-anchor':'end','font-size':11,'font-weight':700,fill:'#2F77C9'}); lr.textContent='R²（上がり続ける）'; svg.appendChild(lr);
+  var la=svgEl('text',{x:xOf(8),y:yOf(ar2(8))+16,'text-anchor':'end','font-size':11,'font-weight':700,fill:'#1FA37A'}); la.textContent='調整済みR²（下がる）'; svg.appendChild(la);
+  var mk=svgEl('line',{stroke:'#CDD5E4','stroke-width':1.5,'stroke-dasharray':'4 4'}); svg.appendChild(mk);
+  var d1=svgEl('circle',{r:6,fill:'#2F77C9',stroke:'#fff','stroke-width':2}); svg.appendChild(d1);
+  var d2=svgEl('circle',{r:6,fill:'#1FA37A',stroke:'#fff','stroke-width':2}); svg.appendChild(d2);
+  var sj=document.getElementById('s-junk');
+  function update(){
+    var k=+sj.value; setFill(sj,0,8);
+    document.getElementById('v-junk').textContent=k+' 個';
+    var a=r2(k), b=ar2(k);
+    document.getElementById('ro-r2').textContent=a.toFixed(3);
+    document.getElementById('ro-ar2').textContent=b.toFixed(3);
+    document.getElementById('ro-gap').textContent=(a-b).toFixed(3);
+    var meAr=document.getElementById('me-ar2');
+    meAr.textContent = k===0 ? 'まだ無駄なし＝R²と一致' : ('ペナルティで '+((a-b)).toFixed(3)+' 下がった');
+    var x=xOf(k);
+    mk.setAttribute('x1',x); mk.setAttribute('y1',PAD.t); mk.setAttribute('x2',x); mk.setAttribute('y2',PAD.t+pH);
+    d1.setAttribute('cx',x); d1.setAttribute('cy',yOf(a));
+    d2.setAttribute('cx',x); d2.setAttribute('cy',yOf(b));
+  }
+  sj.addEventListener('input',update); update();
+})();
+
+/* ---------- quiz ---------- */
+buildQuiz('quiz2',[
+ {q:'Why is adjusted R² preferred over plain R² in multiple regression?',
+  opts:[
+   {t:'It can only be computed when the model contains exactly one predictor variable',ok:false},
+   {t:'It penalizes adding predictors that don’t help, so it isn’t inflated by useless variables',ok:true},
+   {t:'It is always larger than plain R², giving a more optimistic fit score for the model',ok:false},
+   {t:'It ignores the response entirely and measures only correlations among the predictors',ok:false}],
+  exp:'ふつうのR²は無駄な変数でも上がる（ドアノブの数でも！）。調整済みR²は役立たない変数を罰します。'},
+ {q:'For AIC, BIC, and residual standard error (S), which direction is better?',
+  opts:[
+   {t:'Higher is always better, because a bigger value means more variance explained',ok:false},
+   {t:'Lower is better for AIC and BIC, but a higher value of S indicates a better model',ok:false},
+   {t:'The absolute value of each must equal zero for the model to fit the data well',ok:false},
+   {t:'Lower is better for all three of these measures',ok:true}],
+  exp:'AIC・BIC・S はいずれも誤差や複雑さを測るので、低いほど良いモデルです。'},
+ {q:'How should the actual numeric value of AIC (e.g., 10,000) be interpreted?',
+  opts:[
+   {t:'The absolute value is meaningless alone — AIC is only used to compare models with each other',ok:true},
+   {t:'It is the same as the p-value, so any AIC below 0.05 means a significant model fit',ok:false},
+   {t:'It equals the total number of predictors in the model, including the added intercept term',ok:false},
+   {t:'An AIC below 5,000 always signals a good model, regardless of the other candidate scores',ok:false}],
+  exp:'AICは相対指標。数値そのものに意味はなく、競合モデル同士で比べて低いほうを選びます。'},
+ {q:'A significant overall F-statistic tells you that…',
+  opts:[
+   {t:'Every single predictor in the model is individually statistically significant on its own',ok:false},
+   {t:'The model has no residual error left at all, so every prediction is exactly correct',ok:false},
+   {t:'At least one predictor has a non-zero coefficient — but not which particular one(s)',ok:true},
+   {t:'Adjusted R² must equal 1, meaning the predictors explain all of the variation present',ok:false}],
+  exp:'Fはオムニバス検定。有意なら「少なくとも1つの係数がゼロでない」とわかるだけです。'},
+ {q:"Using Mallows' Cp, what indicates a well-specified model?",
+  opts:[
+   {t:'Cp is much less than the number of predictors, signalling a clearly overfitted model',ok:false},
+   {t:'Cp is approximately equal to the number of predictors (including the intercept)',ok:true},
+   {t:'Cp equals exactly zero, which shows the model has captured all of the variation',ok:false},
+   {t:'Cp is much greater than the number of predictors, showing a perfectly fit model',ok:false}],
+  exp:'Cp ≒ 予測変数の数（切片含む）のとき良いモデル。大きすぎは過学習、小さすぎは過小学習です。'}
+]);
+</script>
 </body>
 </html>

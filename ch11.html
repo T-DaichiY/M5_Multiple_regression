@@ -1,268 +1,325 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
-<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>第11章 ステップワイズ＆階層的選択 — 重回帰分析 完全ガイド</title>
-<link href="style.css" rel="stylesheet"/>
-<link href="easy.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第11章 ステップワイズ＆階層的選択 — 重回帰分析 完全ガイド（M5）</title>
+<link rel="stylesheet" href="m6.css">
 </head>
 <body>
-<header class="site-header">
-<div class="logo">重回帰分析 <span>完全ガイド</span></div>
-<nav class="header-nav">
-<a href="index.html">🏠 概要</a>
-<span class="navg"><a class="n-main" href="ch1.html">📈 1</a><a class="n-easy" href="ch1_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch2.html">🩺 2</a><a class="n-easy" href="ch2_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch3.html">⚖️ 3</a><a class="n-easy" href="ch3_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch3_1.html">🎯 3.1</a><a class="n-easy" href="ch3_1_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch4.html">🔗 4</a><a class="n-easy" href="ch4_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch5.html">〰️ 5</a><a class="n-easy" href="ch5_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch6.html">🏷️ 6</a><a class="n-easy" href="ch6_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch7.html">📅 7</a><a class="n-easy" href="ch7_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch8.html">✖️ 8</a><a class="n-easy" href="ch8_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch9.html">➡️ 9</a><a class="n-easy" href="ch9_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch10.html">⬅️ 10</a><a class="n-easy" href="ch10_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main active" href="ch11.html">🔀 11</a><a class="n-easy" href="ch11_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch12.html">🎓 12</a><a class="n-easy" href="ch12_easy.html" title="やさしい版">🍎</a></span>
+
+<nav class="topnav">
+  <div class="brand"><b>重回帰分析</b> 完全ガイド</div>
+  <div class="tabs">
+    <a class="tab home" href="index.html">🏠 概要</a>
+    <a class="tab" href="ch1.html">1</a>
+    <a class="tab" href="ch2.html">2</a>
+    <a class="tab" href="ch3.html">3</a>
+    <a class="tab" href="ch3_1.html">3.1</a>
+    <a class="tab" href="ch4.html">4</a>
+    <a class="tab" href="ch5.html">5</a>
+    <a class="tab" href="ch6.html">6</a>
+    <a class="tab" href="ch7.html">7</a>
+    <a class="tab" href="ch8.html">8</a>
+    <a class="tab" href="ch9.html">9</a>
+    <a class="tab" href="ch10.html">10</a>
+    <a class="tab active" href="ch11.html">11</a>
+    <a class="tab" href="ch12.html">12</a>
+    <a class="tab easy" href="ch11_easy.html">🍎 やさしい版</a>
+  </div>
 </nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="chap">Chapter 11 · Stepwise & Hierarchical</div>
+    <h1>足すことも、削ることも。<br><span class="g">両方できる</span>のが<br>ステップワイズ。</h1>
+    <p class="sub">前進（足すだけ）と後退（削るだけ）を<strong>同時に</strong>やったら？それがステップワイズ。
+    さらに、専門知識で変数を入れる順番を決める「階層的選択」、そして「シンプルが一番」のオッカムの剃刀まで。AICが下がっていく様子を追います。</p>
+    <div class="jump">
+      <a href="#u1">① ステップワイズとは</a>
+      <a href="#u2">② 探索アニメ</a>
+      <a href="#u3">③ p値で制御</a>
+      <a href="#u4">④ 階層的選択</a>
+      <a href="#u5">⑤ パーシモニー</a>
+      <a href="#quiz">📝 Quiz</a>
+    </div>
+    <br>
+    <a class="easy-hero" href="ch11_easy.html">🍎 むずかしく感じたら「超やさしい版」へ →</a>
+  </div>
 </header>
-<div class="ch-banner">
-<div class="ch-banner-inner">
-<div class="ch-tag">Chapter 11</div>
-<h1>🔀 ステップワイズ＆階層的選択</h1>
-<p>前進と後退、両方を同時にやったら？それがステップワイズ。さらに、専門知識（ドメイン知識）に基づいて変数を入れる順番を決める「階層的選択」も学ぶ。</p>
-<div class="unit-nav">
-<a href="#unit1">① ステップワイズとは</a>
-<a href="#unit2">② Rで実行する</a>
-<a href="#unit3">③ p値で出入りを制御</a>
-<a href="#unit4">④ 階層的選択</a>
-<a href="#unit5">⑤ 4手法まとめ・パーシモニー</a>
-<a href="#quiz">📝 Quiz</a>
-</div>
-</div>
-</div>
-<div class="page-layout">
-<main>
-<div class="easy-callout">
-  🍎 <strong>むずかしいと感じたら？</strong> 図・アニメ・スライダーで“特性だけ”をつかめる <a href="ch11_easy.html">▶ 第11章 超やさしい版</a> を先に読むのがおすすめです。
-</div>
-<!-- UNIT 1 -->
-<div class="unit" id="unit1">
-<div class="unit-header">
-<div class="unit-num">①</div>
-<div><h2>ステップワイズ選択 — 両方のいいとこ取り</h2><div class="unit-sub">足すことも、削ることもできる「混合」選択</div></div>
-</div>
-<p>前章までで<strong>前進選択（足す）</strong>と<strong>後退選択（削る）</strong>を学びました。では「<strong>両方を同時にやったら？</strong>」と思った人——するどい！それが<strong>ステップワイズ（mixed / 混合）選択</strong>です。</p>
-<p>ステップワイズは、前進のように予測変数を<strong>足し</strong>、後退のように予測変数を<strong>削る</strong>——両方の良いとこ取りです。各ステップで「足すべきか、削るべきか」を判断します。</p>
-<div class="flow-diagram">
-<div class="flow-box input">全部入りモデル<br/><small>AIC 9160 から</small></div>
-<span class="flow-arrow">→</span>
-<div class="flow-box model">各ステップで<br/>足す or 削る<br/><small>AICが最も下がる操作</small></div>
-<span class="flow-arrow">↺</span>
-<div class="flow-box output">最終モデル<br/><small>AICが最小</small></div>
-</div>
-<div class="note-box">
-<strong>📌 一度削った変数も、また足せる：</strong>ステップワイズの強みは、<strong>後で「やっぱり戻したい」変数を再追加できる</strong>こと。前進選択は足す一方、後退選択は削る一方ですが、ステップワイズは行ったり来たりできます。
+
+<!-- U1 -->
+<section id="u1">
+  <div class="wrap reveal">
+    <div class="eyebrow">Idea · ステップワイズとは</div>
+    <h2>両方の「いいとこ取り」</h2>
+    <p class="lead">前進選択は<strong>足すだけ</strong>、後退選択は<strong>削るだけ</strong>。「両方を同時にやったら？」と思った人——講師いわく「するどい！」。
+    それが<strong>ステップワイズ（mixed／混合）選択</strong>。前進のように足し、後退のように削る、各ステップで「足すか削るか」を判断します。</p>
+    <div class="grid3">
+      <div class="card"><h4 style="color:var(--p)">前進（forward）</h4><p style="margin:0;font-size:.9rem">空モデルから<strong>足す</strong>一方。</p></div>
+      <div class="card"><h4 style="color:var(--o)">後退（backward）</h4><p style="margin:0;font-size:.9rem">全部入りから<strong>削る</strong>一方。</p></div>
+      <div class="card" style="border:2px solid var(--g)"><h4 style="color:var(--g)">ステップワイズ（both）</h4><p style="margin:0;font-size:.9rem"><strong>足す＋削る</strong>を行き来できる。</p></div>
+    </div>
+    <div class="callout info">
+      <div class="ctitle">📌 一度削った変数も、また足せる</div>
+      ステップワイズの強みは、後で「やっぱり戻したい」変数を<strong>再追加できる</strong>こと。各ステップで「＋（足す）」候補と「−（削る）」候補の両方を検討し、AICが一番下がる操作を選びます。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      前進＝「足すだけ」、後退＝「削るだけ」、ステップワイズ＝「<strong>足したり削ったり両方できる</strong>」。
+      味見しながら「塩を足す」も「水で薄める」も自由にできるシェフです👨‍🍳
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>前進＝「足すだけ」、後退＝「削るだけ」、ステップワイズ＝「<strong>足したり削ったり、両方できる</strong>」。料理で言えば、味見しながら「塩を足す」も「水で薄める」も自由にできるシェフです👨‍🍳</p>
-</div>
-</div>
-<!-- UNIT 2 -->
-<div class="unit" id="unit2">
-<div class="unit-header">
-<div class="unit-num">②</div>
-<div><h2>Rでステップワイズを実行</h2><div class="unit-sub">direction = "both" を指定するだけ</div></div>
-</div>
-<p>前進・後退と同じ <code>step()</code> 関数を使い、<code>direction = "both"</code> を指定します。全部入りモデルから始めるのが一般的です。</p>
-<div class="code-block"><span class="cl"><span class="cm"># 全部入りモデルから両方向（足す＋削る）で探索</span></span><span class="cl">model_all <span class="kw">&lt;-</span> <span class="kw">lm</span>(rentals <span class="kw">~</span> ., data <span class="kw">=</span> bikes_encoded)</span><span class="cl"></span><span class="cl"><span class="kw">step</span>(model_all, direction <span class="kw">=</span> <span class="st">"both"</span>)</span></div>
-<p>処理の流れ：全部入り（AIC 9160）→ 全部入りなので<strong>まず削る</strong>しかできません。weekdaySaturday を削るとAICが下がる → real_feel も削る → さらに進めると、途中で「<strong>＋（足し戻す）</strong>」の選択肢も現れます。各ステップでAICを一番下げる操作（足す or 削る）を選び、もう改善しなくなったら停止します。</p>
-<div class="note-box">
-<strong>📌 ＋と−が混在する：</strong>後退選択の出力は「−」だけ、前進は「＋」だけでしたが、<strong>ステップワイズの出力には「＋」と「−」の両方</strong>が現れます。これが「行ったり来たり」している証拠です。
+</section>
+
+<!-- U2 stepwise animation -->
+<section id="u2" style="background:#fff;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Interactive · 探索アニメ</div>
+    <h2>全部入り(AIC 9160)から、<br>足し引きしてAICを下げる</h2>
+    <p class="lead">講義では<strong>全部入りモデル（AIC 9160）</strong>から始めます。全部入りなので<strong>まず削る</strong>しかできません
+    （weekday Saturday を削る → AIC低下、real_feel を削る…）。途中で「＋（足し戻す）」候補も現れます。
+    「次のステップ」を押して、AICが下がる様子を見てください。もう下がらなくなったら停止＝最終モデル。</p>
+
+    <div class="machine">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-family:var(--mono);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">いまの操作</div>
+          <div id="sw-op" style="font-weight:800;font-size:1.15rem;color:var(--ink)">スタート：全部入りモデル</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:var(--mono);font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em">AIC（低いほど良い）</div>
+          <div id="sw-aic" style="font-family:var(--mono);font-weight:800;font-size:1.7rem;color:var(--g)">9160</div>
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <div style="font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-bottom:6px">いまモデルに入っている変数</div>
+        <div id="sw-vars" style="display:flex;flex-wrap:wrap;gap:8px;min-height:38px"></div>
+      </div>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;color:var(--muted)"><span>AICの低下</span><span id="sw-prog">ステップ 0 / 5</span></div>
+        <div style="height:14px;border-radius:8px;background:#eef1f8;overflow:hidden;margin-top:4px">
+          <div id="sw-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#5BD4A8,var(--g));border-radius:8px;transition:width .3s"></div>
+        </div>
+      </div>
+      <div class="btnrow">
+        <button class="btn" id="sw-next">▶ 次のステップ</button>
+        <button class="btn ghost" id="sw-reset">最初から</button>
+      </div>
+    </div>
+
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="cm"># 全部入りモデルから両方向（足す＋削る）で探索</span></span></div>
+      <div class="ln"><span class="n">2</span><span class="c">model_all <span class="kw">&lt;-</span> <span class="fn">lm</span>(rentals <span class="kw">~</span> ., data <span class="kw">=</span> bikes_encoded)</span></div>
+      <div class="ln"><span class="n">3</span><span class="c"><span class="fn">step</span>(model_all, direction <span class="kw">=</span> <span class="st">"both"</span>)</span></div>
+    </div>
+    <div class="callout info">
+      <div class="ctitle">📌 ＋と−が混在する</div>
+      後退選択の出力は「−」だけ、前進は「＋」だけ。でも<strong>ステップワイズの出力には「＋」と「−」の両方</strong>が現れます。これが「行ったり来たり」の証拠です。
+    </div>
+    <div style="font-family:var(--mono);font-size:.72rem;color:var(--muted)">※ 変数名は講義の例（weekday Saturday・real_feel・windspeed²・Monday 等）に基づく<strong>イメージ図</strong>（AIC値は傾向を示す例）。</div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      魔法の言葉は <code>direction = "both"</code>。"forward" でも "backward" でもなく "both"（両方）と言うだけで、足す・削るを自由に行き来してくれます🔀
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>魔法の言葉は <code>direction = "both"</code>。"forward"（前進）でも "backward"（後退）でもなく "both"（両方）と言うだけで、足す・削るを自由に行き来してくれます🔀</p>
-</div>
-</div>
-<!-- UNIT 3 -->
-<div class="unit" id="unit3">
-<div class="unit-header">
-<div class="unit-num">③</div>
-<div><h2>p値で「入る・出る」基準を決める</h2><div class="unit-sub">olsrr の ols_step_both_p</div></div>
-</div>
-<p>AICではなく<strong>p値</strong>を基準にすることもできます。<code>olsrr</code> パッケージの <code>ols_step_both_p</code> を使うと、変数が<strong>入る基準（p_enter）</strong>と<strong>出る基準（p_remove）</strong>を別々に設定できます。</p>
-<div class="code-block"><span class="cl"><span class="kw">library</span>(olsrr)</span><span class="cl"></span><span class="cl"><span class="cm"># p値ベースのステップワイズ（入る≤0.2、出る&gt;0.1で除外）</span></span><span class="cl"><span class="kw">ols_step_both_p</span>(model_all,</span><span class="cl">                p_enter <span class="kw">=</span> <span class="nm">0.2</span>,</span><span class="cl">                p_remove <span class="kw">=</span> <span class="nm">0.1</span>)</span></div>
-<table class="compare-table">
-<tr><th>パラメータ</th><th>意味</th></tr>
-<tr><td><strong>p_enter = 0.2</strong></td><td>変数がモデルに<strong>入る</strong>には、p値が0.2以下である必要がある</td></tr>
-<tr><td><strong>p_remove = 0.1</strong></td><td>p値が0.1より<strong>大きい</strong>変数は、モデルから除外される</td></tr>
-</table>
-<p>出力には AIC・BIC・R²・調整済みR²・SBIC など複数の指標が表示されます。例では、real_feel を追加 → 後で削除、windspeed² を追加 → 後で windspeed を削除、Monday を追加 → やはり不要と判断して削除…と、足し引きを繰り返して最終モデルにたどり着きます。</p>
-<div class="warn-box">
-<strong>⚠️ モデルは自動保存されない：</strong><code>ols_step_both_p</code> は<strong>更新後のモデルを自動では保存しません</strong>。選ばれた変数で実際にモデルを使いたいなら、その変数を自分で <code>lm()</code> に書いて新しいモデルを作る必要があります。また、表示されるのは標準化回帰係数ではなく、ふつうの係数です。
+</section>
+
+<!-- U3 p-value -->
+<section id="u3">
+  <div class="wrap reveal">
+    <div class="eyebrow">Control · p値で出入りを決める</div>
+    <h2>olsrr の ols_step_both_p</h2>
+    <p class="lead">AICではなく<strong>p値</strong>を基準にもできます。<code>olsrr</code> の <code>ols_step_both_p</code> なら、
+    変数が<strong>入る基準（p_enter）</strong>と<strong>出る基準（p_remove）</strong>を別々に設定できます。</p>
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="fn">library</span>(olsrr)</span></div>
+      <div class="ln"><span class="n">2</span><span class="c"><span class="cm"># 入る≤0.2、出る&gt;0.1 で除外</span></span></div>
+      <div class="ln"><span class="n">3</span><span class="c"><span class="fn">ols_step_both_p</span>(model_all, p_enter <span class="kw">=</span> <span class="nm">0.2</span>, p_remove <span class="kw">=</span> <span class="nm">0.1</span>)</span></div>
+    </div>
+    <table class="ctable">
+      <tr><th>パラメータ</th><th>意味</th></tr>
+      <tr><td><strong>p_enter = 0.2</strong></td><td>変数がモデルに<strong>入る</strong>には、p値が0.2以下である必要がある</td></tr>
+      <tr><td><strong>p_remove = 0.1</strong></td><td>p値が0.1より<strong>大きい</strong>変数は、モデルから除外される</td></tr>
+    </table>
+    <p>出力には AIC・BIC・R²・調整済みR²・<strong>SBIC</strong> など複数指標が表示されます。講義の例では、
+    <strong>real_feel を追加 → 後で削除</strong>、<strong>windspeed² を追加 → 後で windspeed を削除</strong>、<strong>Monday を追加 → やはり不要と判断して削除</strong>…と、
+    足し引きを繰り返して最終モデルにたどり着きます。</p>
+    <div class="callout warn">
+      <div class="ctitle">⚠️ モデルは自動保存されない</div>
+      <code>ols_step_both_p</code> は<strong>更新後のモデルを自動保存しません</strong>。選ばれた変数で実際に使いたいなら、その変数を自分で <code>lm()</code> に書いて新しいモデルを作る必要があります。
+      表示されるのは標準化係数ではなく、ふつうの係数です。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      p_enter と p_remove は「クラブの入場・退場ルール」。「p値0.2以下なら入場OK」「0.1超えたら退場」という2つのドアの基準を別々に決められます🚪
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>p_enter と p_remove は「クラブの入場・退場ルール」。「p値0.2以下なら入っていいよ（入場）」「p値0.1超えたら出てってね（退場）」という2つのドアの基準を別々に決められます🚪</p>
-</div>
-</div>
-<!-- UNIT 4 -->
-<div class="unit" id="unit4">
-<div class="unit-header">
-<div class="unit-num">④</div>
-<div><h2>階層的選択 — 専門知識で順番を決める</h2><div class="unit-sub">統計だけでなく「理論」で変数を入れる</div></div>
-</div>
-<p><strong>階層的回帰（hierarchical regression）</strong>は、前進・後退・ステップワイズとは発想が違います。これらが変数を<strong>独立に・統計的に</strong>扱うのに対し、階層的選択は<strong>理論的・概念的な構造を尊重して</strong>変数を順番に入れていきます。</p>
-<p>ポイントは<strong>ドメイン知識（その分野の専門知識）</strong>。データに詳しい専門家が「この変数を先に入れるべき」と判断し、重要度や理論的関係に基づいて順序を決めます。</p>
-<h3>例：会社の「仕事のパフォーマンス」を予測する</h3>
-<div class="iter-loop">
-<div class="loop-step" style="border-color:var(--green)">ステップ1：基本属性を入れる<br/><small>年齢・学歴</small></div>
-<div class="loop-arrow">↓</div>
-<div class="loop-step">ステップ2：仕事関連の変数を追加<br/><small>経験・スキル</small></div>
-<div class="loop-arrow">↓</div>
-<div class="loop-step" style="border-color:var(--yellow)">ステップ3：交互作用項を追加<br/><small>年齢×経験 など</small></div>
-</div>
-<p>このように、まず土台となる変数（年齢・学歴）を入れ、次に直接関係する変数（経験・スキル）、最後に交互作用——と<strong>意味のある順番</strong>で積み上げます。これには、その分野とデータへの深い理解が必要です。</p>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>前進・後退・ステップワイズは「コンピュータが数字（AIC・p値）だけで自動で選ぶ」やり方。階層的選択は「<strong>その道のプロが、経験と理論で『この順番で入れよう』と決める</strong>」やり方。家を建てるとき、まず土台→柱→屋根、と順番が決まっているのと同じです🏗️</p>
-</div>
-</div>
-<!-- UNIT 5 -->
-<div class="unit" id="unit5">
-<div class="unit-header">
-<div class="unit-num">⑤</div>
-<div><h2>4手法まとめ ＆ パーシモニー（簡潔さ）</h2><div class="unit-sub">オッカムの剃刀：シンプルが一番</div></div>
-</div>
-<h3>変数選択 4手法の比較</h3>
-<table class="compare-table">
-<tr><th>手法</th><th>動き</th><th>判断基準</th><th>過学習リスク</th></tr>
-<tr><td>前進選択</td><td>足すのみ</td><td>統計（AIC等）</td><td>あり</td></tr>
-<tr><td>後退選択</td><td>削るのみ</td><td>統計（AIC/p値）</td><td>あり</td></tr>
-<tr><td>ステップワイズ</td><td>足す＋削る</td><td>統計（AIC/p値）</td><td>あり</td></tr>
-<tr><td>階層的選択</td><td>理論で順に追加</td><td><strong>ドメイン知識・理論</strong></td><td>低め（理論ベース）</td></tr>
-</table>
-<h3>パーシモニー（parsimony）＝簡潔さを目指す</h3>
-<p>変数選択のゴールは<strong>パーシモニアスなモデル</strong>＝<strong>できるだけシンプルかつ効果的に</strong>データを説明し、シグナルを捉えつつ予測変数の数を最小にしたモデルです。</p>
-<div class="note-box">
-<strong>🪒 オッカムの剃刀（Occam's Razor）：</strong>「すべての条件が同じなら、よりシンプルな説明（モデル）が好ましい」。たとえば、3変数のモデルと2変数のモデルのAICがほぼ同じなら、<strong>2変数のモデルを選ぶ</strong>。データの保存・収集が少なくて済み、解釈もしやすく、過学習も避けやすいからです。
+</section>
+
+<!-- U4 hierarchical -->
+<section id="u4" style="background:#fff;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Hierarchical · 理論で順番を決める</div>
+    <h2>統計だけでなく<br>「理論」で積み上げる</h2>
+    <p class="lead"><strong>階層的回帰</strong>は発想が違います。前進・後退・ステップワイズが変数を<strong>独立に・統計的に</strong>扱うのに対し、
+    階層的選択は<strong>理論的・概念的な構造を尊重して</strong>変数を順番に入れます。鍵は<strong>ドメイン知識（その分野の専門知識）</strong>——
+    データに詳しい専門家が「この変数を先に入れるべき」と、重要度や理論的関係に基づいて順序を決めます。</p>
+
+    <h3>例：会社の「仕事のパフォーマンス」を予測する</h3>
+    <div class="recipe">
+      <div class="rstep"><div class="rn"></div><div class="rt"><strong>基本属性</strong>を入れる（年齢・学歴）── 土台となる変数</div></div>
+      <div class="rstep"><div class="rn"></div><div class="rt"><strong>仕事関連</strong>を追加（経験・スキル）── 直接関係する変数</div></div>
+      <div class="rstep final"><div class="rn"></div><div class="rt"><strong>交互作用</strong>を追加（年齢×経験 など）── 最後に積む</div></div>
+    </div>
+    <p>このように<strong>意味のある順番</strong>で積み上げます。これには、その分野とデータへの深い理解が必要です。</p>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      前進・後退・ステップワイズは「コンピュータが数字（AIC・p値）だけで自動で選ぶ」。
+      階層的選択は「<strong>その道のプロが経験と理論で『この順番で入れよう』と決める</strong>」。家を建てるとき、土台→柱→屋根と順番が決まっているのと同じです🏗️
+    </div>
   </div>
-<ul>
-<li><strong>効率：</strong>変数が少ない＝集めるデータが少なくて済む。</li>
-<li><strong>解釈性：</strong>少ない変数のほうが人間に理解しやすい。</li>
-<li><strong>汎化：</strong>変数が少ないほど、未知データへの一般化がうまくいき、過学習を避けられる（過学習は<a href="ch12.html">第12章</a>で学ぶ）。</li>
-</ul>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>「オッカムの剃刀」は<strong>「同じ結果なら、シンプルなほうがエライ」</strong>というルール。旅行カバンも、同じ荷物なら小さいほうがラクですよね。モデルも、同じ性能なら変数が少ないほうが扱いやすくて賢いのです🎒</p>
-</div>
-</div>
+</section>
+
+<!-- U5 parsimony -->
+<section id="u5">
+  <div class="wrap reveal">
+    <div class="eyebrow">Goal · パーシモニー（簡潔さ）</div>
+    <h2>4手法まとめ ＆ オッカムの剃刀</h2>
+    <table class="ctable">
+      <tr><th>手法</th><th>動き</th><th>判断基準</th><th>過学習リスク</th></tr>
+      <tr><td>前進選択</td><td>足すのみ</td><td>統計（AIC等）</td><td>あり</td></tr>
+      <tr><td>後退選択</td><td>削るのみ</td><td>統計（AIC/p値）</td><td>あり</td></tr>
+      <tr><td>ステップワイズ</td><td>足す＋削る</td><td>統計（AIC/p値）</td><td>あり</td></tr>
+      <tr><td>階層的選択</td><td>理論で順に追加</td><td><strong>ドメイン知識・理論</strong></td><td>低め（理論ベース）</td></tr>
+    </table>
+
+    <h3>パーシモニー（parsimony）＝簡潔さを目指す</h3>
+    <p>変数選択のゴールは<strong>パーシモニアスなモデル</strong>＝<strong>できるだけシンプルかつ効果的に</strong>データを説明し、シグナルを捉えつつ予測変数の数を最小にしたモデルです。</p>
+    <div class="callout violet">
+      <div class="ctitle">🪒 オッカムの剃刀（Occam's Razor）</div>
+      「すべての条件が同じなら、よりシンプルな説明（モデル）が好ましい」。性能（AICなど）がほぼ同じなら、<strong>変数が少ないモデルを選ぶ</strong>。
+      集めるデータが少なくて済み、解釈しやすく、過学習も避けやすいからです。
+    </div>
+    <div class="grid3">
+      <div class="card"><h4 style="color:var(--g)">効率</h4><p style="margin:0;font-size:.9rem">変数が少ない＝集めるデータが少なくて済む。</p></div>
+      <div class="card"><h4 style="color:var(--p)">解釈性</h4><p style="margin:0;font-size:.9rem">少ない変数のほうが人間に理解しやすい。</p></div>
+      <div class="card"><h4 style="color:var(--l)">汎化</h4><p style="margin:0;font-size:.9rem">変数が少ないほど未知データへの一般化がうまくいく（<a href="ch12.html">第12章</a>）。</p></div>
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      「オッカムの剃刀」は<strong>「同じ結果なら、シンプルなほうがエライ」</strong>というルール。
+      旅行カバンも、同じ荷物なら小さいほうがラク。モデルも、同じ性能なら変数が少ないほうが賢いのです🎒
+    </div>
+  </div>
+</section>
+
 <!-- QUIZ -->
-<div class="quiz-section" id="quiz">
-<div class="quiz-header">
-<h2>📝 第11章 確認クイズ</h2>
-<div class="quiz-score" id="score">0 / 5</div>
-</div>
-<div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-<div class="quiz-lang-note">📌 クイズは英語で出題されます（MCQ is in English）</div>
-<div class="quiz-q">
-<div class="q-num">Question 1 of 5</div>
-<div class="q-text">What is stepwise (mixed) selection?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">A</span> A method that only ever adds predictors to the model, exactly one at a time and never removes</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">B</span> A method that only removes predictors based on theory and the analyst's domain knowledge</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">C</span> A method that fits every single possible subset of the predictors all at the very same time</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,1)"><span class="opt-letter">D</span> A method that both adds and removes predictors at each step, combining forward and backward</button>
-</div>
-<div class="q-feedback" id="fb1"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 2 of 5</div>
-<div class="q-text">In R's step() function, which argument runs stepwise selection?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">A</span> direction = "forward", always starting from the empty null model with no predictors</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,2)"><span class="opt-letter">B</span> direction = "both", usually starting from the full model with every predictor</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">C</span> direction = "backward", which removes the response variable from the model first</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">D</span> direction = "mixed", which squares every predictor before it begins the search</button>
-</div>
-<div class="q-feedback" id="fb2"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 3 of 5</div>
-<div class="q-text">In ols_step_both_p, what do p_enter = 0.2 and p_remove = 0.1 control?</div>
-<div class="options">
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,3)"><span class="opt-letter">A</span> The p-value thresholds for a variable to enter (≤0.2) and to be removed (&gt;0.1) from the model</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">B</span> The minimum and maximum number of predictor variables allowed in the final fitted model</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">C</span> The training and test split proportions used when evaluating the model on unseen data</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">D</span> The learning rate and the momentum value used internally while fitting the regression</button>
-</div>
-<div class="q-feedback" id="fb3"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 4 of 5</div>
-<div class="q-text">How does hierarchical selection differ from the other three methods?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">A</span> It chooses predictors purely by minimizing the AIC, with no human judgement involved at all</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">B</span> It can only ever be used when there is exactly one single predictor variable available</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,4)"><span class="opt-letter">C</span> It adds predictors in a theory-driven order based on domain knowledge, not just statistics</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">D</span> It removes the model's intercept so the fitted line is forced through the origin point</button>
-</div>
-<div class="q-feedback" id="fb4"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 5 of 5</div>
-<div class="q-text">According to Occam's Razor, if two models have roughly the same AIC, which should you prefer?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">A</span> The model with more predictors, because extra variables capture more detail in the data</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">B</span> The model with the highest plain R², no matter how many predictor variables it uses</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">C</span> The model that happened to be trained on the largest total number of observations</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,5)"><span class="opt-letter">D</span> The simpler model with fewer predictors, since it is easier to interpret and generalize</button>
-</div>
-<div class="q-feedback" id="fb5"></div>
-</div>
-<div class="page-nav">
-<a href="ch10.html">← 第10章：後退選択</a>
-<a href="ch12.html">第12章：モデル性能の評価 →</a>
-</div>
-</div>
-</main>
-<aside class="sidebar">
-<div class="glossary">
-<h3>📘 重要用語</h3>
-<div class="term-item"><div class="term-name">ステップワイズ選択</div><div class="term-en">Stepwise / Mixed Selection</div><div class="term-def">変数を足すことも削ることもできる、前進と後退を組み合わせた手法。</div></div>
-<div class="term-item"><div class="term-name">direction = "both"</div><div class="term-en">step() argument</div><div class="term-def">ステップワイズ選択を指定するstep関数の引数。</div></div>
-<div class="term-item"><div class="term-name">p_enter / p_remove</div><div class="term-en">entry/removal thresholds</div><div class="term-def">変数が入る・出るp値の基準。olsrrで指定。</div></div>
-<div class="term-item"><div class="term-name">階層的回帰</div><div class="term-en">Hierarchical Regression</div><div class="term-def">理論・ドメイン知識に基づき、変数を意味ある順番で投入する手法。</div></div>
-<div class="term-item"><div class="term-name">パーシモニー</div><div class="term-en">Parsimony</div><div class="term-def">必要十分な最小の変数で構成された、簡潔なモデルを目指す考え方。</div></div>
-<div class="term-item"><div class="term-name">オッカムの剃刀</div><div class="term-en">Occam's Razor</div><div class="term-def">同条件ならシンプルな説明（モデル）が好ましいという原則。</div></div>
-</div>
-<div class="tip-box">
-<h4>💡 ポイント</h4>
-<p>
-    ステップワイズ ＝ <strong>足す＋削る</strong>（"both"）。<br/><br/>
-    出力に <strong>＋ と −</strong> が混在。<br/><br/>
-    階層的 ＝ <strong>理論で順番</strong>を決める。<br/><br/>
-    ゴールは <strong>パーシモニー</strong>（簡潔さ）。<br/>
-    同じ性能ならシンプルを選ぶ（オッカムの剃刀）。
-    </p>
-</div>
-</aside>
-</div>
+<section id="quiz" style="background:#fff;border-top:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Check · 確認クイズ</div>
+    <h2>第11章 確認クイズ</h2>
+    <div class="quiz-note">📌 クイズは英語で出題されます（MCQ is in English）</div>
+    <div class="quiz" id="quiz11" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section>
+  <div class="wrap reveal">
+    <div class="eyebrow">Glossary · 重要用語</div>
+    <h2 style="font-size:1.4rem">この章の用語</h2>
+    <div class="gloss">
+      <div class="term"><div class="tn">ステップワイズ選択</div><div class="te">Stepwise / Mixed</div><div class="td">足すことも削ることもできる、前進と後退の組み合わせ。</div></div>
+      <div class="term"><div class="tn">direction = "both"</div><div class="te">step() argument</div><div class="td">ステップワイズを指定するstep関数の引数。</div></div>
+      <div class="term"><div class="tn">p_enter / p_remove</div><div class="te">entry/removal thresholds</div><div class="td">変数が入る・出るp値の基準。olsrrで指定。</div></div>
+      <div class="term"><div class="tn">階層的回帰</div><div class="te">Hierarchical Regression</div><div class="td">理論・ドメイン知識で変数を意味ある順に投入する。</div></div>
+      <div class="term"><div class="tn">パーシモニー</div><div class="te">Parsimony</div><div class="td">必要十分な最小の変数で構成された簡潔なモデルを目指す。</div></div>
+      <div class="term"><div class="tn">オッカムの剃刀</div><div class="te">Occam's Razor</div><div class="td">同条件ならシンプルな説明が好ましいという原則。</div></div>
+    </div>
+    <div class="pagenav">
+      <a href="ch10.html">← 第10章：後退選択</a>
+      <a href="ch12.html">第12章：モデル性能の評価 →</a>
+    </div>
+  </div>
+</section>
+
 <footer>
-<p>重回帰分析 完全ガイド · 第11章：ステップワイズ＆階層的選択</p>
-<p style="margin-top:.5rem;"><a href="ch10.html">← 第10章</a> · <a href="ch12.html">第12章 →</a></p>
+  <p>🚲 重回帰分析 完全ガイド · 第11章：ステップワイズ＆階層的選択</p>
+  <p style="margin-top:.4rem"><a href="ch10.html">← 第10章</a> · <a href="ch12.html">第12章 →</a> · <a href="ch11_easy.html">🍎 やさしい版</a></p>
 </footer>
-<script src="quiz.js"></script>
-<script>setupQuiz({
-  1:"Correct! Stepwise (mixed) selection both adds and removes predictors at each step — the best of forward and backward.",
-  2:"Correct! direction = \"both\" runs stepwise selection, typically starting from the full model so it can add and remove.",
-  3:"Correct! p_enter is the p-value threshold to enter the model (≤0.2) and p_remove is the threshold above which a variable is dropped (>0.1).",
-  4:"Correct! Hierarchical selection adds predictors in a theory-driven order based on domain knowledge, unlike the purely statistical methods.",
-  5:"Correct! Occam's Razor favors the simpler model with fewer predictors when performance is similar — easier to interpret and generalize."
-});</script>
-<script src="typewriter.js"></script>
+
+<script src="m6.js"></script>
+<script>
+/* ---------- stepwise animation（講義の変数名に基づくイメージ） ---------- */
+(function(){
+  var steps=[
+    {op:'スタート：全部入りモデル', aic:9160, vars:['humidity','temperature','windspeed','real_feel','weekday:Sat','Monday','windspeed²']},
+    {op:'− weekday:Saturday を削除（全部入りなので、まず削る）', aic:9152, vars:['humidity','temperature','windspeed','real_feel','Monday','windspeed²']},
+    {op:'− real_feel を削除（AICがわずかに低下）', aic:9146, vars:['humidity','temperature','windspeed','Monday','windspeed²']},
+    {op:'＋ windspeed² を足し戻す（＋候補も現れる）', aic:9141, vars:['humidity','temperature','windspeed','Monday','windspeed²'], add:'windspeed²'},
+    {op:'− windspeed を削除（²があれば十分）', aic:9138, vars:['humidity','temperature','Monday','windspeed²']},
+    {op:'− Monday を削除 → これ以上下がらず停止', aic:9135, vars:['humidity','temperature','windspeed²'], final:true}
+  ];
+  var i=0;
+  var elOp=document.getElementById('sw-op'), elAic=document.getElementById('sw-aic'),
+      elVars=document.getElementById('sw-vars'), elBar=document.getElementById('sw-bar'),
+      elProg=document.getElementById('sw-prog'), btnN=document.getElementById('sw-next'), btnR=document.getElementById('sw-reset');
+  var amax=steps[0].aic, amin=steps[steps.length-1].aic;
+  function render(){
+    var s=steps[i];
+    elOp.textContent=s.op;
+    elOp.style.color = s.op.indexOf('＋')>=0? 'var(--g)' : (s.op.indexOf('−')>=0? 'var(--neg)' : 'var(--ink)');
+    elAic.textContent=s.aic;
+    elVars.innerHTML=s.vars.map(function(v){ var hot=(s.add&&v===s.add); return '<span class="tag-pill '+(hot?'g':'p')+'">'+v+'</span>'; }).join('');
+    elBar.style.width=Math.max(2,(amax-s.aic)/(amax-amin)*100)+'%';
+    elProg.textContent='ステップ '+i+' / '+(steps.length-1);
+    btnN.disabled=s.final; btnN.style.opacity=s.final?.5:1;
+    btnN.textContent=s.final?'✓ 最終モデル（停止）':'▶ 次のステップ';
+  }
+  btnN.addEventListener('click',function(){ if(i<steps.length-1){i++;render();} });
+  btnR.addEventListener('click',function(){ i=0; render(); });
+  render();
+})();
+
+/* ---------- quiz ---------- */
+buildQuiz('quiz11',[
+ {q:'What is stepwise (mixed) selection?',
+  opts:[
+   {t:'A method that only ever adds predictors, one at a time, and never removes any of them',ok:false},
+   {t:'A method that only removes predictors based on theory and the analyst’s domain knowledge',ok:false},
+   {t:'A method that fits every single possible subset of the predictors all at the very same time',ok:false},
+   {t:'A method that both adds and removes predictors at each step, combining forward and backward',ok:true}],
+  exp:'ステップワイズは各ステップで足す・削る両方を行う、前進と後退のいいとこ取りです。'},
+ {q:"In R's step() function, which argument runs stepwise selection?",
+  opts:[
+   {t:'direction = "forward", always starting from the empty null model with no predictors',ok:false},
+   {t:'direction = "both", usually starting from the full model with every predictor',ok:true},
+   {t:'direction = "backward", which removes the response variable from the model first',ok:false},
+   {t:'direction = "mixed", which squares every predictor before it begins the search',ok:false}],
+  exp:'direction = "both" がステップワイズ。ふつう全部入りモデルから始め、足し引きできます。'},
+ {q:'In ols_step_both_p, what do p_enter = 0.2 and p_remove = 0.1 control?',
+  opts:[
+   {t:'The p-value thresholds for a variable to enter (≤0.2) and to be removed (>0.1) from the model',ok:true},
+   {t:'The minimum and maximum number of predictor variables allowed in the final fitted model',ok:false},
+   {t:'The training and test split proportions used when evaluating the model on unseen data',ok:false},
+   {t:'The learning rate and the momentum value used internally while fitting the regression line',ok:false}],
+  exp:'p_enter は入る基準（≤0.2）、p_remove は外す基準（>0.1）。出入りのドアを別々に決めます。'},
+ {q:'How does hierarchical selection differ from the other three methods?',
+  opts:[
+   {t:'It chooses predictors purely by minimizing the AIC, with no human judgement involved at all',ok:false},
+   {t:'It can only ever be used when there is exactly one single predictor variable available',ok:false},
+   {t:'It adds predictors in a theory-driven order based on domain knowledge, not just statistics',ok:true},
+   {t:'It removes the model’s intercept so the fitted line is forced through the origin point',ok:false}],
+  exp:'階層的選択は、統計だけでなくドメイン知識・理論に基づく順番で変数を投入します。'},
+ {q:"According to Occam's Razor, if two models have roughly the same AIC, which should you prefer?",
+  opts:[
+   {t:'The model with more predictors, because the extra variables capture more detail in the data',ok:false},
+   {t:'The model with the highest plain R², no matter how many predictor variables it uses overall',ok:false},
+   {t:'The model that happened to be trained on the largest total number of observations available',ok:false},
+   {t:'The simpler model with fewer predictors, since it is easier to interpret and to generalize',ok:true}],
+  exp:'性能が同じなら、変数が少ないシンプルなモデルを選びます（解釈・一般化に有利）。'}
+]);
+</script>
 </body>
 </html>

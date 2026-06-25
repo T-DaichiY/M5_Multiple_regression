@@ -1,266 +1,301 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
-<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>第8章 交互作用 — 重回帰分析 完全ガイド</title>
-<link href="style.css" rel="stylesheet"/>
-<link href="easy.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第8章 交互作用 — 重回帰分析 完全ガイド（M5）</title>
+<link rel="stylesheet" href="m6.css">
 </head>
 <body>
-<header class="site-header">
-<div class="logo">重回帰分析 <span>完全ガイド</span></div>
-<nav class="header-nav">
-<a href="index.html">🏠 概要</a>
-<span class="navg"><a class="n-main" href="ch1.html">📈 1</a><a class="n-easy" href="ch1_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch2.html">🩺 2</a><a class="n-easy" href="ch2_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch3.html">⚖️ 3</a><a class="n-easy" href="ch3_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch3_1.html">🎯 3.1</a><a class="n-easy" href="ch3_1_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch4.html">🔗 4</a><a class="n-easy" href="ch4_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch5.html">〰️ 5</a><a class="n-easy" href="ch5_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch6.html">🏷️ 6</a><a class="n-easy" href="ch6_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch7.html">📅 7</a><a class="n-easy" href="ch7_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main active" href="ch8.html">✖️ 8</a><a class="n-easy" href="ch8_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch9.html">➡️ 9</a><a class="n-easy" href="ch9_easy.html" title="やさしい版">🍎</a></span>
-<span class="navg"><a class="n-main" href="ch10.html">⬅️ 10</a><a class="n-easy" href="ch10_easy.html" title="やさしい版">🍎</a></span>
-    <span class="navg"><a class="n-main" href="ch11.html">🔀 11</a><a class="n-easy" href="ch11_easy.html" title="やさしい版">🍎</a></span>
-    <span class="navg"><a class="n-main" href="ch12.html">🎓 12</a><a class="n-easy" href="ch12_easy.html" title="やさしい版">🍎</a></span>
-  </nav>
+
+<nav class="topnav">
+  <div class="brand"><b>重回帰分析</b> 完全ガイド</div>
+  <div class="tabs">
+    <a class="tab home" href="index.html">🏠 概要</a>
+    <a class="tab" href="ch1.html">1</a>
+    <a class="tab" href="ch2.html">2</a>
+    <a class="tab" href="ch3.html">3</a>
+    <a class="tab" href="ch3_1.html">3.1</a>
+    <a class="tab" href="ch4.html">4</a>
+    <a class="tab" href="ch5.html">5</a>
+    <a class="tab" href="ch6.html">6</a>
+    <a class="tab" href="ch7.html">7</a>
+    <a class="tab active" href="ch8.html">8</a>
+    <a class="tab" href="ch9.html">9</a>
+    <a class="tab" href="ch10.html">10</a>
+    <a class="tab" href="ch11.html">11</a>
+    <a class="tab" href="ch12.html">12</a>
+    <a class="tab easy" href="ch8_easy.html">🍎 やさしい版</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="chap">Chapter 8 · Interaction</div>
+    <h1>運動だけ、食事だけでも効く。<br>でも<span class="g">両方</span>だと、<br>足し算以上になる。</h1>
+    <p class="sub">2つの変数が「組み合わさったとき」に生まれる特別な効果が交互作用。風と雨が重なると、レンタル数は単なる足し算を超えて激減します。
+    2本の線の傾きが違う＝交互作用あり、を切り替えて確かめましょう。</p>
+    <div class="jump">
+      <a href="#u1">① 交互作用とは</a>
+      <a href="#u2">② 共線性との違い</a>
+      <a href="#u3">③ Rでの書き方</a>
+      <a href="#u4">④ 予測の計算</a>
+      <a href="#u5">⑤ 効果を確かめる</a>
+      <a href="#quiz">📝 Quiz</a>
+    </div>
+    <br>
+    <a class="easy-hero" href="ch8_easy.html">🍎 むずかしく感じたら「超やさしい版」へ →</a>
+  </div>
 </header>
-<div class="ch-banner">
-<div class="ch-banner-inner">
-<div class="ch-tag">Chapter 8</div>
-<h1>✖️ 交互作用（Interaction）</h1>
-<p>運動だけ、食事だけでもコレステロールは下がる。でも両方を組み合わせると、効果は単なる足し算以上になる。2変数の「組み合わせ効果」をモデルに入れる方法を学ぶ。</p>
-<div class="unit-nav">
-<a href="#unit1">① 交互作用とは</a>
-<a href="#unit2">② 共線性との違い</a>
-<a href="#unit3">③ Rでの書き方</a>
-<a href="#unit4">④ 予測の計算</a>
-<a href="#unit5">⑤ 効果を確かめる</a>
-<a href="#quiz">📝 Quiz</a>
-</div>
-</div>
-</div>
-<div class="page-layout">
-<main>
-<div class="easy-callout">
-  🍎 <strong>むずかしいと感じたら？</strong> 図・アニメ・スライダーで“特性だけ”をつかめる <a href="ch8_easy.html">▶ 第8章 超やさしい版</a> を先に読むのがおすすめです。
-</div>
-<!-- UNIT 1 -->
-<div class="unit" id="unit1">
-<div class="unit-header">
-<div class="unit-num">①</div>
-<div><h2>交互作用とは — 組み合わせ効果</h2><div class="unit-sub">1+1が2より大きくなることがある</div></div>
-</div>
-<p>ときどき、<strong>2つの変数が「組み合わさったとき」に応答変数へ特別な効果</strong>を生むことがあります。これが<strong>交互作用</strong>です。身近な例：</p>
-<table class="compare-table">
-<tr><th>目標</th><th>単独でも効く</th><th>組み合わせると…</th></tr>
-<tr><td>コレステロールを下げる</td><td>運動 / 食事</td><td>運動＋食事で<strong>さらに大きな効果</strong></td></tr>
-<tr><td>血圧を改善する</td><td>薬 / 生活習慣</td><td>両方の組み合わせで<strong>より大きな改善</strong></td></tr>
-<tr><td>生産性を上げる</td><td>研修 / 経験</td><td>研修＋経験の両方が欲しい</td></tr>
-</table>
-<p>つまり、個々でも良いけれど、<strong>2つの交互作用は単独の効果を足し合わせた以上</strong>になることがあるのです。</p>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>カレーのルウだけ、ごはんだけでもおいしい。でも「カレーライス」にすると、おいしさが単なる足し算を超えますよね。これが交互作用＝組み合わせの魔法です🍛</p>
-</div>
-</div>
-<!-- UNIT 2 -->
-<div class="unit" id="unit2">
-<div class="unit-header">
-<div class="unit-num">②</div>
-<div><h2>多重共線性との違い</h2><div class="unit-sub">似ているようで、まったく別もの</div></div>
-</div>
-<table class="compare-table">
-<tr><th></th><th>多重共線性（第4章）</th><th>交互作用（この章）</th></tr>
-<tr><td>2変数の関係</td><td>互いに<strong>相関している</strong>（似ている）</td><td>必ずしも相関していない</td></tr>
-<tr><td>問題か効果か</td><td>⚠️ 問題（係数が不安定に）</td><td>✅ 効果（予測がよくなる）</td></tr>
-<tr><td>ポイント</td><td>変数同士が被っている</td><td>変数を<strong>組み合わせた効果</strong>が応答に効く</td></tr>
-</table>
-<p>交互作用では、2つの変数は<strong>互いに関連していなくてもよい</strong>のです。組み合わせたときに、別々にしておくのとは違う効果が応答変数に現れる——これが交互作用です。</p>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>多重共線性は「同じことを言う双子」（被ってて困る）。交互作用は「性格の違う2人がチームを組むと、すごい力を発揮する」（組み合わせが強い）。似て非なるものです👥</p>
-</div>
-</div>
-<!-- UNIT 3 -->
-<div class="unit" id="unit3">
-<div class="unit-header">
-<div class="unit-num">③</div>
-<div><h2>Rでの書き方（* と :）</h2><div class="unit-sub">風速×天気の組み合わせ効果を入れる</div></div>
-</div>
-<p>自転車の例では、<strong>天気が悪化し、かつ風速も上がった</strong>ら、それぞれ単独より大きくレンタル数に効くと考えられます。Rで交互作用を入れるには <code>*</code> を使います。出力では交互作用が <code>:</code>（コロン）で表示されます。</p>
-<div class="code-block"><span class="cl"><span class="cm"># 交互作用なしのモデル</span></span><span class="cl">model <span class="kw">&lt;-</span> <span class="kw">lm</span>(rentals <span class="kw">~</span> windspeed <span class="kw">+</span> weather, data <span class="kw">=</span> bikes_clean)</span><span class="cl"></span><span class="cl"><span class="cm"># 交互作用あり: * は両方を個別＋交互作用で含める近道</span></span><span class="cl">model_int <span class="kw">&lt;-</span> <span class="kw">lm</span>(rentals <span class="kw">~</span> windspeed <span class="kw">*</span> weather, data <span class="kw">=</span> bikes_clean)</span><span class="cl"><span class="kw">summary</span>(model_int)</span></div>
-<div class="note-box">
-<strong>📌 * と : の違い：</strong><code>windspeed * weather</code> は「windspeed」「weather」「windspeed:weather（交互作用）」の<strong>3つすべて</strong>を自動で含める近道。出力では交互作用項が <code>windspeed:weatherHeavy</code> のようにコロンで表示されます。
+
+<!-- U1 -->
+<section id="u1">
+  <div class="wrap reveal">
+    <div class="eyebrow">Idea · 交互作用とは</div>
+    <h2>1+1 が 2 より大きくなる</h2>
+    <p class="lead">ときどき、<strong>2つの変数が「組み合わさったとき」に応答変数へ特別な効果</strong>を生みます。これが<strong>交互作用</strong>。</p>
+    <table class="ctable">
+      <tr><th>目標</th><th>単独でも効く</th><th>組み合わせると…</th></tr>
+      <tr><td>コレステロールを下げる</td><td>運動 / 食事</td><td>運動＋食事で<strong>さらに大きな効果</strong></td></tr>
+      <tr><td>血圧を改善する</td><td>薬 / 生活習慣</td><td>両方の組み合わせで<strong>より大きな改善</strong></td></tr>
+      <tr><td>生産性を上げる</td><td>研修 / 経験</td><td>研修＋経験の両方が欲しい</td></tr>
+    </table>
+    <p>つまり、個々でも良いけれど、<strong>2つの交互作用は単独の効果を足し合わせた以上</strong>になることがあるのです。</p>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      カレーのルウだけ、ごはんだけでもおいしい。でも「カレーライス」にすると、おいしさが単なる足し算を超えますよね。これが交互作用＝組み合わせの魔法です🍛
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p><code>*</code>（アスタリスク）は「2人を別々に呼んで、さらにペアとしても呼ぶ」という便利な記号。<code>:</code>（コロン）は出力の中で「これがペアの効果だよ」と教えてくれる印です✖️</p>
-</div>
-</div>
-<!-- UNIT 4 -->
-<div class="unit" id="unit4">
-<div class="unit-header">
-<div class="unit-num">④</div>
-<div><h2>交互作用つきの式で予測する</h2><div class="unit-sub">交互作用項にも値を代入する</div></div>
-</div>
-<p>交互作用つきモデルの式はこうなります（係数は例）。天気は「大雨か？」「小雨か？」のYes/No（0/1）で、両方0なら晴れの日です。</p>
-<div class="code-block"><span class="cl">予測 = 切片</span><span class="cl"> <span class="kw">-</span> <span class="nm">132</span> <span class="kw">×</span> 風速</span><span class="cl"> <span class="kw">-</span> <span class="nm">1878</span> <span class="kw">×</span> 大雨(0 or 1)</span><span class="cl"> <span class="kw">-</span> ... <span class="kw">×</span> 小雨(0 or 1)</span><span class="cl"> <span class="kw">+</span> 係数 <span class="kw">×</span> (風速 <span class="kw">×</span> 大雨)   <span class="cm"># ← 交互作用項</span></span><span class="cl"> <span class="kw">+</span> 係数 <span class="kw">×</span> (風速 <span class="kw">×</span> 小雨)</span></div>
-<h3>例：風速10mph・晴れの日（大雨も小雨もNo）</h3>
-<p>風速＝10、大雨＝0、小雨＝0。すると交互作用項（風速×大雨など）はすべて0になります。計算すると<strong>約4,579台</strong>のレンタル予測。</p>
-<div class="warn-box">
-<strong>💡 実務のヒント：</strong>手計算は理解のためで、実際は <code>predict()</code> 関数や自作関数を使うほうが効率的です。
+</section>
+
+<!-- U2 -->
+<section id="u2" style="background:#fff;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">vs · 共線性との違い</div>
+    <h2>似ているようで、まったく別もの</h2>
+    <table class="ctable">
+      <tr><th></th><th>多重共線性（第4章）</th><th>交互作用（この章）</th></tr>
+      <tr><td>2変数の関係</td><td>互いに<strong>相関している</strong>（似ている）</td><td>必ずしも相関していない</td></tr>
+      <tr><td>問題か効果か</td><td>⚠️ 問題（係数が不安定に）</td><td>✅ 効果（予測がよくなる）</td></tr>
+      <tr><td>ポイント</td><td>変数同士が被っている</td><td>変数を<strong>組み合わせた効果</strong>が応答に効く</td></tr>
+    </table>
+    <p>交互作用では、2つの変数は<strong>互いに関連していなくてもよい</strong>のです。組み合わせたときに、別々にしておくのとは違う効果が現れる——これが交互作用です。</p>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      多重共線性は「同じことを言う双子」（被ってて困る）。交互作用は「性格の違う2人がチームを組むと、すごい力を発揮する」（組み合わせが強い）。似て非なるものです👥
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>交互作用つきの式は「材料費＋ペアセット割引」みたいなもの。風速と天気を別々に足すだけでなく、「風速×天気のペア効果」も計算に入れる。だから現実に近い予測ができます🧮</p>
-</div>
-</div>
-<!-- UNIT 5 -->
-<div class="unit" id="unit5">
-<div class="unit-header">
-<div class="unit-num">⑤</div>
-<div><h2>交互作用の効果を確かめる</h2><div class="unit-sub">風と雨が「重なる」と予測が大きく変わる</div></div>
-</div>
-<p>風速（軽い1mph vs 強い10mph）と天気（晴れ・小雨・大雨）を組み合わせて予測を比べると、交互作用の威力がわかります。</p>
-<table class="compare-table">
-<tr><th>条件</th><th>予測レンタル数</th></tr>
-<tr><td>強風(10) ＋ 晴れ</td><td>4,579</td></tr>
-<tr><td>強風(10) ＋ 小雨</td><td>3,815 付近</td></tr>
-<tr><td><strong>強風(10) ＋ 大雨</strong></td><td><strong>1,940（大きく激減！）</strong></td></tr>
-<tr><td>弱風(1) ＋ 大雨</td><td>3,815（強風時よりずっと多い）</td></tr>
-</table>
-<div class="viz">
-<div class="viz-title">交互作用：風と雨が重なると予測が激減</div>
-<svg style="width:100%;max-width:520px;display:block;margin:0 auto;" viewbox="0 0 520 200" xmlns="http://www.w3.org/2000/svg">
-<line stroke="#94a3b8" stroke-width="1.5" x1="60" x2="490" y1="170" y2="170"></line>
-<line stroke="#94a3b8" stroke-width="1.5" x1="60" x2="60" y1="20" y2="170"></line>
-<text fill="#64748b" font-size="10" text-anchor="middle" transform="rotate(-90 22 95)" x="22" y="95">予測レンタル数</text>
-<!-- light wind line (gentle slope) -->
-<polyline fill="none" points="120,55 270,70 430,95" stroke="#059669" stroke-width="3"></polyline>
-<circle cx="120" cy="55" fill="#059669" r="4"></circle><circle cx="270" cy="70" fill="#059669" r="4"></circle><circle cx="430" cy="95" fill="#059669" r="4"></circle>
-<text fill="#059669" font-size="10" font-weight="700" x="445" y="92">弱風</text>
-<!-- heavy wind line (steep drop) -->
-<polyline fill="none" points="120,75 270,100 430,150" stroke="#dc2626" stroke-width="3"></polyline>
-<circle cx="120" cy="75" fill="#dc2626" r="4"></circle><circle cx="270" cy="100" fill="#dc2626" r="4"></circle><circle cx="430" cy="150" fill="#dc2626" r="4"></circle>
-<text fill="#dc2626" font-size="10" font-weight="700" x="445" y="150">強風</text>
-<text fill="#64748b" font-size="10" text-anchor="middle" x="120" y="188">晴れ</text>
-<text fill="#64748b" font-size="10" text-anchor="middle" x="270" y="188">小雨</text>
-<text fill="#64748b" font-size="10" text-anchor="middle" x="430" y="188">大雨</text>
-</svg>
-<div class="viz-cap">弱風だと天気が悪くても緩やかに減る。強風だと天気の悪化で急降下。2本の線の傾きが違う＝交互作用がある証拠。</div>
-</div>
-<p>ポイント：風だけ・雨だけで見ると予測はそれぞれ違いますが、<strong>2つの交互作用</strong>を考えると、別々に見たときとは<strong>大きく異なる予測</strong>が得られます。線の傾きが違うことが、交互作用の存在を示しています。</p>
-<div class="note-box">
-<strong>📌 補足：</strong>交互作用は<strong>線プロット</strong>でも判定できます（2本の線が平行でなければ交互作用あり）。また<strong>ANOVA</strong>も交互作用を扱います。
+</section>
+
+<!-- U3 R -->
+<section id="u3">
+  <div class="wrap reveal">
+    <div class="eyebrow">In R · 書き方（* と :）</div>
+    <h2>風速 × 天気 の組み合わせ効果</h2>
+    <p class="lead"><strong>天気が悪化し、かつ風速も上がった</strong>ら、それぞれ単独より大きくレンタル数に効くはず。Rでは <code>*</code> を使います。出力では交互作用が <code>:</code>（コロン）で表示されます。</p>
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c"><span class="cm"># 交互作用なし</span></span></div>
+      <div class="ln"><span class="n">2</span><span class="c">model <span class="kw">&lt;-</span> <span class="fn">lm</span>(rentals <span class="kw">~</span> windspeed <span class="kw">+</span> weather, data <span class="kw">=</span> bikes_clean)</span></div>
+      <div class="ln"><span class="n">3</span><span class="c"><span class="cm"># 交互作用あり: * は両方を個別＋交互作用で含める近道</span></span></div>
+      <div class="ln"><span class="n">4</span><span class="c">model_int <span class="kw">&lt;-</span> <span class="fn">lm</span>(rentals <span class="kw">~</span> windspeed <span class="kw">*</span> weather, data <span class="kw">=</span> bikes_clean)</span></div>
+    </div>
+    <div class="callout info">
+      <div class="ctitle">📌 * と : の違い</div>
+      <code>windspeed * weather</code> は「windspeed」「weather」「windspeed:weather（交互作用）」の<strong>3つすべて</strong>を自動で含める近道。
+      出力では交互作用項が <code>windspeed:weatherHeavy</code> のようにコロンで表示されます。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      <code>*</code> は「2人を別々に呼んで、さらにペアとしても呼ぶ」という便利な記号。<code>:</code> は出力の中で「これがペアの効果だよ」と教えてくれる印です✖️
+    </div>
   </div>
-<div class="simple-box">
-<div class="simple-title">🍎 かんたん説明</div>
-<p>「弱い風＋大雨」より「強い風＋大雨」のほうが、自転車を借りる人がずっと減りますよね。風と雨が<strong>重なると</strong>ダブルパンチ。これが交互作用。別々に足し算しただけでは、このダブルパンチを見逃してしまいます🌧️💨</p>
-</div>
-</div>
+</section>
+
+<!-- U4 predict -->
+<section id="u4" style="background:#fff;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Predict · 交互作用つきの予測</div>
+    <h2>交互作用項にも値を代入する</h2>
+    <p class="lead">交互作用つきモデルの式（係数は例）。天気は「大雨か？」「小雨か？」のYes/No（0/1）で、両方0なら晴れです。</p>
+    <div class="codeblk">
+      <div class="ln"><span class="n">1</span><span class="c">予測 = 切片 <span class="kw">-</span> <span class="nm">132</span> <span class="kw">×</span> 風速 <span class="kw">-</span> <span class="nm">1878</span> <span class="kw">×</span> 大雨(0/1) <span class="kw">-</span> … <span class="kw">×</span> 小雨(0/1)</span></div>
+      <div class="ln"><span class="n">2</span><span class="c">       <span class="kw">+</span> 係数 <span class="kw">×</span> (風速 <span class="kw">×</span> 大雨)   <span class="cm"># ← 交互作用項</span></span></div>
+      <div class="ln"><span class="n">3</span><span class="c">       <span class="kw">+</span> 係数 <span class="kw">×</span> (風速 <span class="kw">×</span> 小雨)</span></div>
+    </div>
+    <p><strong>例：風速10mph・晴れの日</strong>（大雨=0, 小雨=0）。交互作用項はすべて0になり、計算すると<strong>約4,579台</strong>の予測。</p>
+    <div class="callout warn">
+      <div class="ctitle">💡 実務のヒント</div>
+      手計算は理解のためで、実際は <code>predict()</code> 関数や自作関数を使うほうが効率的です。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      交互作用つきの式は「材料費＋ペアセット割引」みたいなもの。風速と天気を別々に足すだけでなく、「風速×天気のペア効果」も計算に入れる。だから現実に近い予測ができます🧮
+    </div>
+  </div>
+</section>
+
+<!-- U5 interaction line plot interactive -->
+<section id="u5">
+  <div class="wrap reveal">
+    <div class="eyebrow">Interactive · 効果を確かめる</div>
+    <h2>2本の線が平行でない＝<br>交互作用がある</h2>
+    <p class="lead">風速（弱風 vs 強風）と天気（晴れ→小雨→大雨）でレンタル予測を比べます。
+    ボタンで「交互作用なし（平行）」と「あり（非平行）」を切り替えてください。<strong>傾きが違う＝風と雨のダブルパンチ</strong>が起きている証拠です。</p>
+
+    <div class="machine">
+      <div class="btnrow" style="margin-top:0">
+        <button class="btn" id="btn-int">交互作用あり（非平行）</button>
+        <button class="btn ghost" id="btn-noint">交互作用なし（平行）</button>
+      </div>
+      <div class="svgwrap">
+        <svg id="intsvg" viewBox="0 0 600 300" style="width:100%;max-width:600px;display:block;margin:0 auto"></svg>
+      </div>
+      <div class="readouts" style="margin-top:8px">
+        <div class="ro g"><div class="lab">弱風 + 大雨</div><div class="big" id="ro-light">3,815</div><div class="meaning">緩やかに減る</div></div>
+        <div class="ro neg" style="background:#fbeaea;border-color:#f3c9c9"><div class="lab" style="color:var(--neg)">強風 + 大雨</div><div class="big" id="ro-heavy" style="color:var(--neg)">1,940</div><div class="meaning">急降下！ダブルパンチ</div></div>
+        <div class="ro l"><div class="lab">判定</div><div class="big" id="ro-int" style="font-size:1.2rem">交互作用あり</div><div class="meaning" id="me-int">傾きが違う</div></div>
+      </div>
+    </div>
+
+    <table class="ctable">
+      <tr><th>条件</th><th>予測レンタル数</th></tr>
+      <tr><td>強風(10) ＋ 晴れ</td><td>4,579</td></tr>
+      <tr><td>強風(10) ＋ 小雨</td><td>3,815 付近</td></tr>
+      <tr><td><strong>強風(10) ＋ 大雨</strong></td><td><strong>1,940（大きく激減！）</strong></td></tr>
+      <tr><td>弱風(1) ＋ 大雨</td><td>3,815（強風時よりずっと多い）</td></tr>
+    </table>
+    <div class="callout info">
+      <div class="ctitle">📌 補足</div>
+      交互作用は<strong>線プロット</strong>で判定できます（2本の線が平行でなければ交互作用あり）。また<strong>ANOVA</strong>も交互作用を扱います。
+    </div>
+    <div class="simple">
+      <div class="stitle">🍎 かんたん説明</div>
+      「弱い風＋大雨」より「強い風＋大雨」のほうが、自転車を借りる人がずっと減る。風と雨が<strong>重なると</strong>ダブルパンチ。
+      別々に足し算しただけでは、このダブルパンチを見逃します🌧️💨
+    </div>
+  </div>
+</section>
+
 <!-- QUIZ -->
-<div class="quiz-section" id="quiz">
-<div class="quiz-header">
-<h2>📝 第8章 確認クイズ</h2>
-<div class="quiz-score" id="score">0 / 5</div>
-</div>
-<div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-<div class="quiz-lang-note">📌 クイズは英語で出題されます（MCQ is in English）</div>
-<div class="quiz-q">
-<div class="q-num">Question 1 of 5</div>
-<div class="q-text">What is an interaction effect?</div>
-<div class="options">
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,1)"><span class="opt-letter">A</span> When two variables combined have an effect on the response that differs from their separate effects</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">B</span> When a predictor variable is dropped from the model in order to reduce overfitting on the data</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">C</span> When two predictors are so perfectly correlated that they end up carrying the same information</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,1)"><span class="opt-letter">D</span> When the response variable happens to be categorical rather than a continuous numeric quantity</button>
-</div>
-<div class="q-feedback" id="fb1"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 2 of 5</div>
-<div class="q-text">How does interaction differ from multicollinearity?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">A</span> They are exactly the same statistical idea, just described using two slightly different names</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,2)"><span class="opt-letter">B</span> Multicollinearity is a problem from correlated predictors; interaction is a useful combined effect</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">C</span> Interaction can only ever occur between the response variable and one single model predictor</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,2)"><span class="opt-letter">D</span> Multicollinearity always improves the predictions, while interaction terms always harm the model</button>
-</div>
-<div class="q-feedback" id="fb2"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 3 of 5</div>
-<div class="q-text">In R, what does <code>windspeed * weather</code> include in the model?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">A</span> Only windspeed as a single main-effect predictor</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">B</span> Only the interaction term, without either main effect</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,3)"><span class="opt-letter">C</span> It removes both variables and fits an intercept only</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,3)"><span class="opt-letter">D</span> windspeed, weather, AND their interaction (windspeed:weather)</button>
-</div>
-<div class="q-feedback" id="fb3"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 4 of 5</div>
-<div class="q-text">How is an interaction term shown in R's summary output?</div>
-<div class="options">
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">A</span> With a plus sign joining the two variable names (windspeed+weather)</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">B</span> It is never shown — interaction terms are hidden from the summary table</button>
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,4)"><span class="opt-letter">C</span> With a colon between the two variable names (e.g., windspeed:weatherHeavy)</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,4)"><span class="opt-letter">D</span> With a minus sign separating the two variable names (windspeed−weather)</button>
-</div>
-<div class="q-feedback" id="fb4"></div>
-</div>
-<div class="quiz-q">
-<div class="q-num">Question 5 of 5</div>
-<div class="q-text">Why does considering the interaction of wind and rain matter for predictions?</div>
-<div class="options">
-<button class="option-btn" data-correct="true" onclick="checkAnswer(this,5)"><span class="opt-letter">A</span> The combination (e.g., heavy wind + heavy rain) gives very different estimates than treating them separately</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">B</span> It never changes the prediction at all, since the two separate effects simply add together cleanly</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">C</span> Because wind and rain are actually the response variable that the regression model is predicting</button>
-<button class="option-btn" data-correct="false" onclick="checkAnswer(this,5)"><span class="opt-letter">D</span> Because adding the interaction term automatically removes the intercept from the fitted model</button>
-</div>
-<div class="q-feedback" id="fb5"></div>
-</div>
-<div class="page-nav">
-<a href="ch7.html">← 第7章:日付データ</a>
-<a href="ch9.html">第9章:前進選択 →</a>
-</div>
-</div>
-</main>
-<aside class="sidebar">
-<div class="glossary">
-<h3>📘 重要用語</h3>
-<div class="term-item"><div class="term-name">交互作用</div><div class="term-en">Interaction</div><div class="term-def">2変数を組み合わせたときに生じる、別々とは異なる応答への効果。</div></div>
-<div class="term-item"><div class="term-name">* （アスタリスク）</div><div class="term-en">interaction operator</div><div class="term-def">A*B で A・B・A:B の3つを自動で含める近道。</div></div>
-<div class="term-item"><div class="term-name">: （コロン）</div><div class="term-en">colon</div><div class="term-def">出力で交互作用項を表す記号（例 windspeed:weatherHeavy）。</div></div>
-<div class="term-item"><div class="term-name">線プロット</div><div class="term-en">Line plot</div><div class="term-def">2本の線が平行でなければ交互作用ありと判定できる。</div></div>
-</div>
-<div class="tip-box">
-<h4>💡 ポイント</h4>
-<p>
-    交互作用 ＝ <strong>組み合わせ効果</strong>（1+1が2以上に）。<br/><br/>
-    共線性とは別もの（こちらは“効果”）。<br/><br/>
-    R： <strong>A * B</strong> で個別＋ペアを一括。<br/><br/>
-    線が平行でない＝交互作用あり。
-    </p>
-</div>
-</aside>
-</div>
+<section id="quiz" style="background:#fff;border-top:1px solid var(--hair)">
+  <div class="wrap reveal">
+    <div class="eyebrow">Check · 確認クイズ</div>
+    <h2>第8章 確認クイズ</h2>
+    <div class="quiz-note">📌 クイズは英語で出題されます（MCQ is in English）</div>
+    <div class="quiz" id="quiz8" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<!-- GLOSSARY -->
+<section>
+  <div class="wrap reveal">
+    <div class="eyebrow">Glossary · 重要用語</div>
+    <h2 style="font-size:1.4rem">この章の用語</h2>
+    <div class="gloss">
+      <div class="term"><div class="tn">交互作用</div><div class="te">Interaction</div><div class="td">2変数を組み合わせたときに生じる、別々とは異なる応答への効果。</div></div>
+      <div class="term"><div class="tn">* （アスタリスク）</div><div class="te">interaction operator</div><div class="td">A*B で A・B・A:B の3つを自動で含める近道。</div></div>
+      <div class="term"><div class="tn">: （コロン）</div><div class="te">colon</div><div class="td">出力で交互作用項を表す記号（例 windspeed:weatherHeavy）。</div></div>
+      <div class="term"><div class="tn">線プロット</div><div class="te">Line plot</div><div class="td">2本の線が平行でなければ交互作用ありと判定できる。</div></div>
+    </div>
+    <div class="pagenav">
+      <a href="ch7.html">← 第7章：日付データ</a>
+      <a href="ch9.html">第9章：前進選択 →</a>
+    </div>
+  </div>
+</section>
+
 <footer>
-<p>重回帰分析 完全ガイド · 第8章:交互作用</p>
-<p style="margin-top:.5rem;"><a href="ch7.html">← 第7章</a> · <a href="ch9.html">第9章 →</a></p>
+  <p>🚲 重回帰分析 完全ガイド · 第8章：交互作用</p>
+  <p style="margin-top:.4rem"><a href="ch7.html">← 第7章</a> · <a href="ch9.html">第9章 →</a> · <a href="ch8_easy.html">🍎 やさしい版</a></p>
 </footer>
-<script src="quiz.js"></script>
-<script>setupQuiz({
-  1:"Correct! An interaction is when two variables combined affect the response differently than their separate effects would suggest.",
-  2:"Correct! Multicollinearity is a problem from correlated predictors; interaction is a useful combined effect, and the two variables need not be correlated.",
-  3:"Correct! windspeed * weather is a shortcut that includes windspeed, weather, and their interaction term automatically.",
-  4:"Correct! R shows interaction terms with a colon between the variable names, e.g., windspeed:weatherHeavy.",
-  5:"Correct! Heavy wind + heavy rain together gives a much lower estimate than treating wind and rain separately — that's why the interaction matters."
-});</script>
-<script src="typewriter.js"></script>
+
+<script src="m6.js"></script>
+<script>
+/* ---------- interaction line plot ---------- */
+(function(){
+  var svg=document.getElementById('intsvg');
+  var W=600,H=300,PAD={l:60,r:60,t:24,b:48}, pW=W-PAD.l-PAD.r, pH=H-PAD.t-PAD.b;
+  var YMIN=1500,YMAX=5000;
+  var xs=[0,1,2]; // 晴れ, 小雨, 大雨
+  function xOf(i){return PAD.l + i/2*pW;}
+  function yOf(y){return PAD.t + (1-(y-YMIN)/(YMAX-YMIN))*pH;}
+  // axes + x labels
+  svg.appendChild(svgEl('line',{class:'axis',x1:PAD.l,y1:PAD.t,x2:PAD.l,y2:PAD.t+pH}));
+  svg.appendChild(svgEl('line',{class:'axis',x1:PAD.l,y1:PAD.t+pH,x2:PAD.l+pW,y2:PAD.t+pH}));
+  ['晴れ','小雨','大雨'].forEach(function(lab,i){
+    var t=svgEl('text',{class:'axlab',x:xOf(i),y:H-24,'text-anchor':'middle'}); t.textContent=lab; svg.appendChild(t);
+  });
+  svg.appendChild((function(){var t=svgEl('text',{class:'axlab',x:14,y:PAD.t+4});t.textContent='予測';return t;})());
+  // weak (green) line: gentle slope both modes
+  var weak={int:[4750,4300,3815], no:[4750,4300,3815]};
+  // strong (red): interaction -> steep; no-interaction -> parallel to weak (shifted down)
+  var strong={int:[4579,3815,1940], no:[4300,3850,3365]};
+  var weakLine=svgEl('polyline',{fill:'none',stroke:'#1FA37A','stroke-width':3});
+  var strongLine=svgEl('polyline',{fill:'none',stroke:'#D84C4C','stroke-width':3});
+  svg.appendChild(weakLine); svg.appendChild(strongLine);
+  var dots=svgEl('g',{}); svg.appendChild(dots);
+  function draw(mode){
+    var w=weak[mode], s=strong[mode];
+    weakLine.setAttribute('points', xs.map(function(i){return xOf(i)+','+yOf(w[i]);}).join(' '));
+    strongLine.setAttribute('points', xs.map(function(i){return xOf(i)+','+yOf(s[i]);}).join(' '));
+    dots.innerHTML='';
+    xs.forEach(function(i){
+      dots.appendChild(svgEl('circle',{cx:xOf(i),cy:yOf(w[i]),r:5,fill:'#1FA37A',stroke:'#fff','stroke-width':1.5}));
+      dots.appendChild(svgEl('circle',{cx:xOf(i),cy:yOf(s[i]),r:5,fill:'#D84C4C',stroke:'#fff','stroke-width':1.5}));
+    });
+    dots.appendChild((function(){var t=svgEl('text',{x:xOf(2)+6,y:yOf(w[2])+4,'font-size':10,'font-weight':700,fill:'#1FA37A'});t.textContent='弱風';return t;})());
+    dots.appendChild((function(){var t=svgEl('text',{x:xOf(2)+6,y:yOf(s[2])+4,'font-size':10,'font-weight':700,fill:'#D84C4C'});t.textContent='強風';return t;})());
+    document.getElementById('ro-heavy').textContent=s[2].toLocaleString();
+    document.getElementById('ro-light').textContent=w[2].toLocaleString();
+    var ri=document.getElementById('ro-int'), me=document.getElementById('me-int');
+    if(mode==='int'){ ri.textContent='交互作用あり'; ri.style.color='var(--l)'; me.textContent='2本の線が非平行'; }
+    else { ri.textContent='交互作用なし'; ri.style.color='var(--muted)'; me.textContent='2本の線が平行'; }
+    var bi=document.getElementById('btn-int'), bn=document.getElementById('btn-noint');
+    if(mode==='int'){bi.className='btn';bn.className='btn ghost';} else {bn.className='btn';bi.className='btn ghost';}
+  }
+  document.getElementById('btn-int').addEventListener('click',function(){draw('int');});
+  document.getElementById('btn-noint').addEventListener('click',function(){draw('no');});
+  draw('int');
+})();
+
+/* ---------- quiz ---------- */
+buildQuiz('quiz8',[
+ {q:'What is an interaction effect?',
+  opts:[
+   {t:'When two variables combined have an effect on the response that differs from their separate effects',ok:true},
+   {t:'When a predictor variable is dropped from the model in order to reduce overfitting on the data',ok:false},
+   {t:'When two predictors are so perfectly correlated that they end up carrying the same information',ok:false},
+   {t:'When the response variable happens to be categorical rather than a continuous numeric quantity',ok:false}],
+  exp:'交互作用は、2変数を組み合わせたときに、別々の効果とは異なる効果が応答に現れることです。'},
+ {q:'How does interaction differ from multicollinearity?',
+  opts:[
+   {t:'They are exactly the same statistical idea, just described using two slightly different names',ok:false},
+   {t:'Multicollinearity is a problem from correlated predictors; interaction is a useful combined effect',ok:true},
+   {t:'Interaction can only ever occur between the response variable and one single model predictor',ok:false},
+   {t:'Multicollinearity always improves the predictions, while interaction terms always harm the model',ok:false}],
+  exp:'共線性は相関した予測変数による「問題」。交互作用は組み合わせの「効果」で、相関は必須ではありません。'},
+ {q:'In R, what does windspeed * weather include in the model?',
+  opts:[
+   {t:'Only windspeed as a single main-effect predictor in the model',ok:false},
+   {t:'Only the interaction term, without either of the two main effects',ok:false},
+   {t:'It removes both variables and fits a model with only an intercept',ok:false},
+   {t:'windspeed, weather, AND their interaction (windspeed:weather)',ok:true}],
+  exp:'A * B は A・B・A:B（交互作用）の3つを自動で含める近道です。'},
+ {q:"How is an interaction term shown in R's summary output?",
+  opts:[
+   {t:'With a plus sign joining the two variable names (windspeed+weather)',ok:false},
+   {t:'It is never shown — interaction terms are hidden from the summary table',ok:false},
+   {t:'With a colon between the two variable names (e.g., windspeed:weatherHeavy)',ok:true},
+   {t:'With a minus sign separating the two variable names (windspeed−weather)',ok:false}],
+  exp:'交互作用項は コロン（:）で表示されます（例 windspeed:weatherHeavy）。'},
+ {q:'Why does considering the interaction of wind and rain matter for predictions?',
+  opts:[
+   {t:'The combination (e.g., heavy wind + heavy rain) gives very different estimates than treating them separately',ok:true},
+   {t:'It never changes the prediction at all, since the two separate effects simply add together cleanly',ok:false},
+   {t:'Because wind and rain are actually the response variable that the regression model is predicting',ok:false},
+   {t:'Because adding the interaction term automatically removes the intercept from the fitted model',ok:false}],
+  exp:'強風＋大雨のような組み合わせは、別々に扱うのとは大きく異なる予測になります。だから交互作用が重要です。'}
+]);
+</script>
 </body>
 </html>
